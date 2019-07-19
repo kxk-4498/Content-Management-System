@@ -35,7 +35,7 @@
             <li><a href="#">Contact Us</a></li>
             <li><a href="#">Feature</a></li>
         </ul>
-        <form action="Portal.php" class="navbar-form navbar-right">
+        <form method="POST" action="Portal.php" class="navbar-form navbar-right">
         <div class="form-group">
         <input type="text" class="form-control" placeholder="Search" name="Search">
         </div>
@@ -52,11 +52,16 @@
             <div class="col-sm-8">
             <?php
             global $connection;
-            if(isset($_GET["SearchButton"])){
-                $Search=$_GET["Search"];
-                $ViewQuery="SELECT * FROM admin_panel 
+            if(isset($_REQUEST["SearchButton"])){
+               // $Search=strip_tags(trim($_REQUEST["Search"]));
+                //echo $Search;
+                $Search = mysqli_real_escape_string($connection, $_REQUEST["Search"]);
+                //echo $Search;
+                $ViewQuery= "SELECT * FROM admin_panel 
                 WHERE datetime LIKE '%$Search%' OR title LIKE '%$Search%'
-                OR category LIKE '%$Search%' or post LIKE '%$Search$'";    
+                OR category LIKE '%$Search%' or post LIKE '%$Search'";
+                // $ViewQuery->bindValue(':search', $Search, PDO::PARA_STR);
+
             }
             else{
             $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc";}
@@ -69,6 +74,11 @@
                 $Admin=$DataRows["author"];
                 $Image=$DataRows["image"];
                 $Post=$DataRows["post"];
+                // echo "PostID : ".$postId;
+                // if($postId == NULL)
+                // {
+                //     echo "No Data";
+                // }
             
             ?>
             <div class="blogpost thumbnail">

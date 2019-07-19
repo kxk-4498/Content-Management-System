@@ -5,8 +5,11 @@
 if(isset($_POST["Submit"])){
     global $connection;
     $Title=mysqli_real_escape_string($connection,$_POST["Title"]);
+    $Title=htmlentities(htmlspecialchars($Title, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     $Category=mysqli_real_escape_string($connection,$_POST["Category"]);
+    $Category=htmlentities(htmlspecialchars($Category, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     $Post=mysqli_real_escape_string($connection,$_POST["Post"]);
+    $Post=htmlentities(htmlspecialchars($Post, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     date_default_timezone_set("Asia/Kolkata");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);

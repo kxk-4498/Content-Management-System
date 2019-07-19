@@ -5,8 +5,11 @@
 if(isset($_POST["Submit"])){
     global $connection;
     $Title=mysqli_real_escape_string($connection,$_POST["Title"]);
+    $Title=htmlentities(htmlspecialchars($Title, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     $Category=mysqli_real_escape_string($connection,$_POST["Category"]);
+    $Category=htmlentities(htmlspecialchars($Category, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     $Post=mysqli_real_escape_string($connection,$_POST["Post"]);
+    $Post=htmlentities(htmlspecialchars($Post, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     date_default_timezone_set("Asia/Kolkata");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
@@ -141,10 +144,15 @@ if(isset($_POST["Submit"])){
          ?>
         <div>
         <?php
-            $SearchQueryParameter=$_GET['Edit'];
             global $connection;
+            $SearchQueryParameter=mysqli_real_escape_string($connection, $_REQUEST['Edit']);
+            //echo $SearchQueryParameter;
             $ViewQuery="SELECT * FROM admin_panel WHERE id='$SearchQueryParameter'";
             $Execute=mysqli_query($connection,$ViewQuery);
+            $TitleUpdate=NULL;
+            $CategoryUpdate=NULL;
+            $ImageUpdate=NULL;
+            $PostUpdate=NULL;
             while($DataRows=mysqli_fetch_array($Execute)){
                 $TitleUpdate=$DataRows['title'];
                 $CategoryUpdate=$DataRows["category"];

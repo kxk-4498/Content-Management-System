@@ -5,13 +5,16 @@
 if(isset($_POST["Submit"])){
     global $connection;
     $Name=mysqli_real_escape_string($connection,$_POST["Name"]);
+    $Name=htmlentities(htmlspecialchars($Name, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     $Email=mysqli_real_escape_string($connection,$_POST["Email"]);
+    //$Email=htmlentities(htmlspecialchars($Email, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     $Comment=mysqli_real_escape_string($connection,$_POST["Comment"]);
+    $Comment=htmlentities(htmlspecialchars($Comment, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     date_default_timezone_set("Asia/Kolkata");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
     $DateTime;
-    $PostID=$_GET["id"];
+    $PostID=mysqli_real_escape_string($connection, $_REQUEST["id"]);
     if(empty($Name)||empty($Email)||empty($Comment)){
         $_SESSION["ErrorMessage"]="all feilds are required.";
 
@@ -115,13 +118,13 @@ if(isset($_POST["Submit"])){
             <?php
             global $connection;
             if(isset($_GET["SearchButton"])){
-                $Search=$_GET["Search"];
+                $Search=mysqli_real_escape_string($connection, $_REQUEST["Search"]);
                 $ViewQuery="SELECT * FROM admin_panel 
                 WHERE datetime LIKE '%$Search%' OR title LIKE '%$Search%'
                 OR category LIKE '%$Search%' or post LIKE '%$Search$'";    
             }
             else{
-            $PostIDFromURL=$_GET["id"];
+            $PostIDFromURL=mysqli_real_escape_string($connection, $_REQUEST["id"]);
             $ViewQuery="SELECT * FROM admin_panel  WHERE id='$PostIDFromURL'
             ORDER BY datetime desc";}
             $Execute=mysqli_query($connection,$ViewQuery);
@@ -153,7 +156,7 @@ if(isset($_POST["Submit"])){
             <span class="FieldInfo">Comments</span>
             <?php
             global $connection;
-            $PostIDForComments=$_GET["id"];
+            $PostIDForComments=mysqli_real_escape_string($connection, $_REQUEST["id"]);
             $ExtractingCommentsQuery="SELECT * FROM comments
             WHERE admin_panel_id='$PostIDForComments' AND status='ON'";
             $Execute=mysqli_query($connection,$ExtractingCommentsQuery);
@@ -177,7 +180,7 @@ if(isset($_POST["Submit"])){
             <br>
             <span class ="FieldInfo">Share your thoughts about this post</span>
             <div>
-        <form action="FullPost.php?id={$PostID}" method="post" enctype="multipart/form-data">
+        <form action="FullPost.php?id=<?php echo $_REQUEST['id']; ?>" method="post" enctype="multipart/form-data">
         <fieldset>
             <div class="form-group">
             <label for="Name"><span  class="FieldInfo">Name:</span></label>

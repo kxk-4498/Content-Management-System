@@ -2,9 +2,9 @@
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
 <?php
-if(isset($_GET["id"])){
+if(isset($_REQUEST["id"])){
     global $connection;
-    $IDFromURL=$_GET["id"];
+    $IDFromURL=mysqli_real_escape_string($connection, $_REQUEST["id"]);
     $Query="UPDATE comments SET status='ON' WHERE id='$IDFromURL'";
     $Execute=mysqli_query($connection,$Query);
     if($Execute){
