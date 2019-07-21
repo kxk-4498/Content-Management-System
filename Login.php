@@ -2,6 +2,7 @@
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
 <?php
+
 if(isset($_POST["Submit"])){
     global $connection;
     $Username=mysqli_real_escape_string($connection,$_POST["Username"]);
@@ -74,7 +75,7 @@ body{
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="Portal.php">
+        <a class="navbar-brand" href="portal">
         <img style="margin-top: -12px;" src="images/maha.jfif" width=40;height=7;>
         </a>
         </div>

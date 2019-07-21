@@ -1,7 +1,9 @@
  <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
-<?php Confirm_Admin();
+<?php 
+Confirm_Login();
+Confirm_Admin();
 ?>
 <?php
 

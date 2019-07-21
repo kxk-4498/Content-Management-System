@@ -75,7 +75,7 @@
         <li><a href="manageAdmin">
         <span class="glyphicon glyphicon-user"></span>
         &nbsp;Manage Admins</a></li>
-        <li  class="active"><a href="Comments.php">
+        <li  class="active"><a href="comments">
         <span class="glyphicon glyphicon-comment"></span>
         &nbsp;Comments
         <?php
