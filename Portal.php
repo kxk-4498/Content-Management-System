@@ -7,6 +7,7 @@
     <head>
         <title>Portal</title>
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="css/publicstyles.css">
@@ -15,6 +16,7 @@
 <!-- <div style="height: 12px;background: #27aae1;"></div> -->
 <nav class ="navbar navbar-inverse navbar-default" role="navigation">
     <div class="container">
+
         <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse">
             <span class="sr-only">Toggle Navigation</span>
@@ -85,16 +87,10 @@
                 }else{
                 $ShowPostFrom=($Page*5)-5;
                 }
-
-
-
                 $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc LIMIT $ShowPostFrom,5";
-
-
-
             }//query for showing portal contents
             else{
-            Redirect_to('portal?page=');
+            Redirect_to('portal?page=1');
             $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc LIMIT 0,5";}
             $Execute=mysqli_query($connection,$ViewQuery);
             while($DataRows=mysqli_fetch_array($Execute)){
@@ -124,6 +120,16 @@
             <?php } ?>
             <nav>
             <ul class="pagination pull left pagination-lg">
+                 <!-- code for Backward button-->
+                <?php
+                if(isset($Page))
+                {
+                if($Page>1){
+                    ?>
+                    <li><a href="portal?Page=<?php echo $Page-1; ?>">&laquo;</a></li>
+                <?php }?>
+
+              <?php  } ?>
             <?php
             global $connection;
             $QueryPagination="SELECT COUNT(*) FROM admin_panel";
@@ -149,15 +155,83 @@
         }
      }
      } ?>
+     <!-- code for forward button-->
+      <?php
+                if(isset($Page))
+                {
+                if($Page+1<=$PostsPerPage){
+                    ?>
+                    <li><a href="portal?page=<?php echo $Page+1; ?>">&raquo;</a></li>
+                <?php }?>
+
+              <?php  } ?>
             </ul>
             </nav>
 
 
             </div><!--Main area ending-->
             <div class="col-sm-offset-1 col-sm-3">
-            <h2>Test</h2>
-            <p>Lorem ipsum dolor sit amet, <em>consectetur adipiscing elit</em>, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <h2>Maharashtra Cyber</h2>
+            <img class="img-responsive imageicon" src="images/mahapolice.png">
+            <p>Maharashtra Cyber ​is a nodal agency established by the Government of Maharashtra to tackle cyber crimes and other digital threats. It is engaged in building Cyber Infrastructure for Maharashtra, including Cyber Police Stations, anti-piracy systems, predictive policing systems, awareness about cyber crimesand initiatives, etc.</p>
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+            <h2 class="panel-title">Category</h2>
+            </div>
+            <div class="panel-body background">
+                <?php
+                global $connection;
+                $ViewQuery="SELECT * FROM category ORDER BY datetime desc";
+                $Execute=mysqli_query($connection,$ViewQuery);
+                while($DataRows=mysqli_fetch_array($Execute)){
+                    $Id=$DataRows["id"];
+                    $Category=$DataRows["name"];
+                
+                ?>
+                <a href="portal?Search=<?php echo $Category; ?>">
+                <span id="heading"><?php echo $Category."<br>";?></span>
+                </a>
+                <div class="panel-footer"> </div>
+                <?php }?>
+            
+            </div>
+            
+        </div>
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+            <h2 class="panel-title">Recent Posts</h2>
+            </div>
+            <div class="panel-body background">
+                <?php
+                 global $connection;
+                $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc LIMIT 0,5";
+            $Execute=mysqli_query($connection,$ViewQuery);
+            while($DataRows=mysqli_fetch_array($Execute)){
+                $postId=$DataRows["id"];
+                $DateTime=$DataRows["datetime"];
+                $Title=$DataRows["title"];
+                $Image=$DataRows["image"];
+                if(strlen($DateTime)>12){$DateTime=substr($DateTime,0,12);}
+            
+            ?>
+            <div>
+                <img class="pull-left" style="margin-top: 10px; margin-left: 10px;" src="Upload/<?php echo htmlentities($Image); ?>" width=50; height=50;>
+                <a href="fullPost?id=<?php echo $postId; ?>">
+                    <p id="heading" style=" margin-left: 90px;"><?php echo htmlentities($Title); ?></p>
+            </a>
+            <p class="description"  style=" margin-left: 90px;"><?php echo htmlentities($DateTime); ?></p>
+            <hr>    
+            </div>
+            <?php } ?>
+            
+            </div>
+            <div class="panel-footer">
+            
+            </div>
+        </div>
 
             </div><!--Side area ending-->
         </div><!--Row Ending-->

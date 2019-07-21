@@ -48,4 +48,23 @@
 .btn-info {
     float: right;
 }
+<<<<<<< HEAD
 /* body { padding-top: 70px; } */
+=======
+
+.imageicon {
+    max-width: 150 px;
+    margin: 0 auto;
+    display: block;
+}
+
+.background {
+    background-color: #F6F7F9;
+}
+
+.navbar-static-top {
+    margin: 0;
+    border: 0;
+    color: #fff;
+}
+>>>>>>> 5f18a784189e2142f1421751c209f61de2d661b8
