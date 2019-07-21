@@ -48,3 +48,19 @@
 .btn-info {
     float: right;
 }
+
+.imageicon {
+    max-width: 150 px;
+    margin: 0 auto;
+    display: block;
+}
+
+.background {
+    background-color: #F6F7F9;
+}
+
+.navbar-static-top {
+    margin: 0;
+    border: 0;
+    color: #fff;
+}

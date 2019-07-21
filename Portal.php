@@ -6,15 +6,53 @@
 <html>
     <head>
         <title>Portal Page</title>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Dosis:400,700' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="css/publicstyles.css">
     </head>
     <body>
+    <nav class="navbar navbar-static-top">
+<div class="navbar-top">
+
+              <div class="container">
+                  <div class="row">
+
+                    <div class="col-sm-6 col-xs-12">
+
+                        <ul class="list-unstyled list-inline header-contact">
+                            <li> <i class="fa fa-phone"></i> <a href="tel:">+212 658 986 213 </a> </li>
+                             <li> <i class="fa fa-envelope"></i> <a href="mailto:contact@sadaka.org">contact@sadaka.org</a> </li>
+                       </ul> <!-- /.header-contact  -->
+                      
+                    </div>
+
+                    <div class="col-sm-6 col-xs-12 text-right">
+
+                        <ul class="list-unstyled list-inline header-social">
+
+                            <li> <a href="#"> <i class="fa fa-facebook"></i> </a> </li>
+                            <li> <a href="#"> <i class="fa fa-twitter"></i>  </a> </li>
+                            <li> <a href="#"> <i class="fa fa-google"></i>  </a> </li>
+                            <li> <a href="#"> <i class="fa fa-youtube"></i>  </a> </li>
+                            <li> <a href="#"> <i class="fa fa fa-pinterest-p"></i>  </a> </li>
+                       </ul> <!-- /.header-social  -->
+                      
+                    </div>
+
+
+                  </div>
+              </div>
+
+</div>
+</nav>
 <div style="height: 10px;background: #27aae1;"></div>
 <nav class ="navbar navbar-inverse" role="navigation">
     <div class="container">
+
         <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse">
             <span class="sr-only">Toggle Navigation</span>
@@ -58,7 +96,14 @@
                 $ViewQuery="SELECT * FROM admin_panel 
                 WHERE datetime LIKE '%$Search%' OR title LIKE '%$Search%'
                 OR category LIKE '%$Search%' or post LIKE '%$Search$'";    
-            }//query when pagination active
+            }elseif(isset($_GET["category"])){
+                $Category=$_GET["category"];
+                $ViewQuery="SELECT * FROM admin_panel WHERE category='$Category' ORDER BY datetime desc";
+                
+            }
+            
+            
+            //query when pagination active
             elseif(isset($_GET["Page"])){
                 $Page=$_GET["Page"];
                 if($Page==0||$Page<-1)
@@ -105,6 +150,16 @@
             <?php } ?>
             <nav>
             <ul class="pagination pull left pagination-lg">
+                 <!-- code for Backward button-->
+                <?php
+                if(isset($Page))
+                {
+                if($Page>1){
+                    ?>
+                    <li><a href="Portal.php?Page=<?php echo $Page-1; ?>">&laquo;</a></li>
+                <?php }?>
+
+              <?php  } ?>
             <?php
             global $connection;
             $QueryPagination="SELECT COUNT(*) FROM admin_panel";
@@ -130,6 +185,16 @@
         }
      }
      } ?>
+     <!-- code for forward button-->
+      <?php
+                if(isset($Page))
+                {
+                if($Page+1<=$PostsPerPage){
+                    ?>
+                    <li><a href="Portal.php?Page=<?php echo $Page+1; ?>">&raquo;</a></li>
+                <?php }?>
+
+              <?php  } ?>
             </ul>
             </nav>
 
@@ -137,8 +202,68 @@
             </div><!--Main area ending-->
             <div class="col-sm-offset-1 col-sm-3">
             <h2>Test</h2>
+            <img class="img-responsive img-circle imageicon" src="images/gal.jpg">
             <p>Lorem ipsum dolor sit amet, <em>consectetur adipiscing elit</em>, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+            <h2 class="panel-title">Category</h2>
+            </div>
+            <div class="panel-body background">
+                <?php
+                global $connection;
+                $ViewQuery="SELECT * FROM category ORDER BY datetime desc";
+                $Execute=mysqli_query($connection,$ViewQuery);
+                while($DataRows=mysqli_fetch_array($Execute)){
+                    $Id=$DataRows["id"];
+                    $Category=$DataRows["name"];
+                
+                ?>
+                <a href="Portal.php?category=<?php echo $Category; ?>">
+                <span id="heading"><?php echo $Category."<br>";?></span>
+                </a>
+                <?php }?>
+            
+            </div>
+            <div class="panel-footer">
+            
+            </div>
+        </div>
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+            <h2 class="panel-title">Recent Posts</h2>
+            </div>
+            <div class="panel-body background">
+                <?php
+                 global $connection;
+                $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc LIMIT 0,5";
+            $Execute=mysqli_query($connection,$ViewQuery);
+            while($DataRows=mysqli_fetch_array($Execute)){
+                $postId=$DataRows["id"];
+                $DateTime=$DataRows["datetime"];
+                $Title=$DataRows["title"];
+                $Image=$DataRows["image"];
+                if(strlen($DateTime)>12){$DateTime=substr($DateTime,0,12);}
+            
+            ?>
+            <div>
+                <img class="pull-left" style="margin-top: 10px; margin-left: 10px;" src="Upload/<?php echo htmlentities($Image); ?>" width=70; height=70;>
+                <a href="fullPost?id=<?php echo $postId; ?>">
+                    <p id="heading" style=" margin-left: 90px;"><?php echo htmlentities($Title); ?></p>
+            </a>
+            <p class="description"  style=" margin-left: 90px;"><?php echo htmlentities($DateTime); ?></p>
+            <hr>    
+            </div>
+            <?php } ?>
+            
+            </div>
+            <div class="panel-footer">
+            
+            </div>
+        </div>
 
             </div><!--Side area ending-->
         </div><!--Row Ending-->
