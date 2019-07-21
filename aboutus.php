@@ -63,20 +63,36 @@
         </nav>
         <div class="Line" style="height: 10px;background: #27AAE1;"></div>
         <div class="container">
-            <div class="blog header">
+            <!-- <div class="blog header">
             <h1>Threat Intelligence</h1>
-            </div>
+            </div> -->
         <div class="row">
-            <div class="col-sm-12">
+            <div class="media">
+            <div class="media-left media-top col-xs-12 col-md-2 ">
+                <a href="#">
+                    <img class="media-object" src="images/intelligence_threat.png" alt="Threat Intelligence" widht="22%" height="22%">
+                </a>
+                </div>
+                <div class="media-body">
+                <h2 class="media-heading">Threat Intelligence</h2>
                 <p>To address the growing problem of Threat Intelligence, Maharashtra Cyber, the nodal agency for Cyber Security under the Home Department, Govt. of Maharashtra has envisaged an Anti-Phishing Unit, a specialised team that will enact all measures required to help detect and act on such cases as-soon-as possible through focused coordination.</p>
-         
-            </div><!--Main area ending-->
+            </div>
+            </div>
+            
         </div><!--Row Ending-->
         <div class="blog header">
-            <h1>Maharashtra Cyber</h1>
+            <!-- <h1>Maharashtra Cyber</h1> -->
         </div>
         <div class="row">
-            <div class="col-sm-12">
+        <div class="media">
+                <div class="media-left media-top col-xs-12 col-md-2">
+                <a href="#">
+                    <img class="media-object" src="images/mahacyber.png" alt="Threat Intelligence" widht="27%" height="27%">
+                </a>
+                </div>
+                <div class="media-body">
+                <h1 class="media-heading">Maharashtra Cyber</h1>
+            <div class="col-sm-8 col-md-12">
             <p>Maharashtra Cyber ​is a nodal agency established by the Government of Maharashtra to tackle cyber crimes and other digital threats. It is engaged in building Cyber Infrastructure for Maharashtra, including Cyber Police Stations, anti-piracy systems, predictive policing systems, awareness about cyber crimesand initiatives, etc.</p>
             <p>Maharashtra Cyber is currently working on the development of an integrated technological environment for Maharashtra through the ​Maharashtra Cyber Security Project​. The department through its efforts made Maharashtra the first state in the country to have 47 cyber-police stations and 51 Cyber Labs to expedite the criminal investigation cycle. This project has 4 major components,
             <ul>
@@ -90,6 +106,8 @@
             Maharashtra Cyber is also involved in developing ​<b>Automated Multimodal Biometric Identification system ​(AMBIS)</b>, which is a state-of-the-art system envisaging Iris, Facial, Fingerprints and Palm prints for identification of the criminals.
             </p>
             <p>Maharashtra Cyber has established a multi-stakeholder anti-piracy unit to fight against online piracy in cyberspace. ​<b>Maharashtra Cyber Digital Crime Unit(MCDCU)</b> has been successful in taking down many piracy websites in its efforts and thus also strengthening the IPR regime in the country.</p>
+            </div>
+            </div>
             </div>
         </div>
 </div><!--Container Ending-->

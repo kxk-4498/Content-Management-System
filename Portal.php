@@ -114,6 +114,7 @@
             
             echo $Post; ?> </p>  
             </div>
+            <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
             <a href="fullPost?id=<?php echo $postId; ?>"><span class="btn btn-info">
                 Read More &rsaquo;</span></a>
             </div>
@@ -189,7 +190,7 @@
                     $Category=$DataRows["name"];
                 
                 ?>
-                <a href="portal?Search=<?php echo $Category; ?>">
+                <a href="portal?Search=<?php echo $Category; ?>&SearchButton=">
                 <span id="heading"><?php echo $Category."<br>";?></span>
                 </a>
                 <div class="panel-footer"> </div>
@@ -218,7 +219,7 @@
             
             ?>
             <div>
-                <img class="pull-left" style="margin-top: 10px; margin-left: 10px;" src="Upload/<?php echo htmlentities($Image); ?>" width=50; height=50;>
+                <img class="pull-left" style="margin-top: 10px; margin-left: 10px;" src="Upload/<?php echo htmlentities($Image); ?>" width=70; height=50;>
                 <a href="fullPost?id=<?php echo $postId; ?>">
                     <p id="heading" style=" margin-left: 90px;"><?php echo htmlentities($Title); ?></p>
             </a>

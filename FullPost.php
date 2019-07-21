@@ -215,10 +215,9 @@ if(isset($_POST["Submit"])){
         </div>
             </div><!--Main area ending-->
             <div class="col-sm-offset-1 col-sm-3">
-            <h2>Test</h2>
-            <p>Lorem ipsum dolor sit amet, <em>consectetur adipiscing elit</em>, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
+            <<h2>Maharashtra Cyber</h2>
+            <img class="img-responsive imageicon" src="images/mahapolice.png">
+            <p>Maharashtra Cyber ​is a nodal agency established by the Government of Maharashtra to tackle cyber crimes and other digital threats. It is engaged in building Cyber Infrastructure for Maharashtra, including Cyber Police Stations, anti-piracy systems, predictive policing systems, awareness about cyber crimesand initiatives, etc.</p>
         <div class="panel panel-primary">
             <div class="panel-heading">
             <h2 class="panel-title">Category</h2>
@@ -236,12 +235,11 @@ if(isset($_POST["Submit"])){
                 <a href="Portal.php?category=<?php echo $Category; ?>">
                 <span id="heading"><?php echo $Category."<br>";?></span>
                 </a>
+                <div class="panel-footer"></div>
                 <?php }?>
             
             </div>
-            <div class="panel-footer">
-            
-            </div>
+
         </div>
 
 
@@ -263,7 +261,7 @@ if(isset($_POST["Submit"])){
             
             ?>
             <div>
-                <img class="pull-left" style="margin-top: 10px; margin-left: 10px;" src="Upload/<?php echo htmlentities($Image); ?>" width=70; height=70;>
+                <img class="pull-left" style="margin-top: 10px; margin-left: 10px;" src="Upload/<?php echo htmlentities($Image); ?>" width=70; height=50;>
                 <a href="fullPost?id=<?php echo $postId; ?>">
                     <p id="heading" style=" margin-left: 90px;"><?php echo htmlentities($Title); ?></p>
             </a>
