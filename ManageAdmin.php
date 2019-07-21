@@ -1,43 +1,52 @@
  <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
-<?php Confirm_Login(); ?>
+<?php Confirm_Admin();
+?>
 <?php
+
 if(isset($_POST["Submit"])){
-    global $connection;
-    $Username=mysqli_real_escape_string($connection,$_POST["Username"]);
-    $Password=mysqli_real_escape_string($connection,$_POST["Password"]);
-    $ConfirmPassword=mysqli_real_escape_string($connection,$_POST["ConfirmPassword"]);
-    date_default_timezone_set("Asia/Kolkata");
-    $CurrentTime=time();
-    $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
-    $DateTime;
-    $Admin=$_SESSION["Username"];
-    if(empty($Username)||empty($Password)||empty($ConfirmPassword)){
-        $_SESSION["ErrorMessage"]="all feilds must be filled out";
-        Redirect_to("ManageAdmin.php");
-    }elseif(strlen($Password)<4){
-        $_SESSION["ErrorMessage"]="Atleast 4 characters of password required!";
-        Redirect_to("ManageAdmin.php");
-    }elseif($Password!==$ConfirmPassword){
-         $_SESSION["ErrorMessage"]="Password/Confirm Password does not match!";
-        Redirect_to("ManageAdmin.php");
-    }else{
-        global $connection;
-        $Query="INSERT INTO admin_registration(datetime,username,password,addedby)
-        VALUES('$DateTime','$Username','$Password','$Admin')";
-        $Execute=mysqli_query($connection,$Query);
-        if($Execute){
-            $_SESSION["SuccessMessage"]="Admin added successfully";
-            Redirect_to("ManageAdmin.php");
-
-        }else{
-            $_SESSION["ErrorMessage"]="Admin failed to add";
-            Redirect_to("ManageAdmin.php");
-
+    if(!empty($_REQUEST['csrf_token'])){
+        if( checkToken($_REQUEST['csrf_token'], 'protectedManageAdmin')) {
+            global $connection;
+            $Username=mysqli_real_escape_string($connection,$_POST["Username"]);
+            $Username=htmlentities(htmlspecialchars($Username, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            $Password=mysqli_real_escape_string($connection,$_POST["Password"]);
+            $Password=htmlentities(htmlspecialchars($Password, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            $ConfirmPassword=mysqli_real_escape_string($connection,$_POST["ConfirmPassword"]);
+            $ConfirmPassword=htmlentities(htmlspecialchars($ConfirmPassword, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+        
+            date_default_timezone_set("Asia/Kolkata");
+            $CurrentTime=time();
+            $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
+            $DateTime;
+            $Admin=$_SESSION["Username"];
+            if(empty($Username)||empty($Password)||empty($ConfirmPassword)){
+                $_SESSION["ErrorMessage"]="all feilds must be filled out";
+                Redirect_to("manageAdmin");
+            }elseif(strlen($Password)<4){
+                $_SESSION["ErrorMessage"]="Atleast 4 characters of password required!";
+                Redirect_to("manageAdmin");
+            }elseif($Password!==$ConfirmPassword){
+                 $_SESSION["ErrorMessage"]="Password/Confirm Password does not match!";
+                Redirect_to("manageAdmin");
+            }else{
+                global $connection;
+                $Query="INSERT INTO admin_registration(datetime,username,password,addedby)
+                VALUES('$DateTime','$Username','$Password','$Admin')";
+                $Execute=mysqli_query($connection,$Query);
+                if($Execute){
+                    $_SESSION["SuccessMessage"]="Admin added successfully";
+                    Redirect_to("manageAdmin");
+        
+                }else{
+                    $_SESSION["ErrorMessage"]="Admin failed to add";
+                    Redirect_to("manageAdmin");
+        
+                }
+            }
+        }
     }
-}
-
 }
 
 ?>
@@ -102,19 +111,19 @@ if(isset($_POST["Submit"])){
     <div class="col-sm-2">
     <br><br>
         <ul id="Side_Menu" class="nav nav-pills nav-stacked">
-        <li><a href="Dashboard.php">
+        <li><a href="dashboard">
         <span class="glyphicon glyphicon-th"></span>
         &nbsp;Dashboard</a></li>
-        <li><a href="Categories.php">
+        <li><a href="categories">
         <span class="glyphicon glyphicon-tags"></span>
         &nbsp;Categories</a></li>
-        <li><a href="AddNewPost.php">
+        <li><a href="addNewPost">
         <span class="glyphicon glyphicon-list-alt"></span>
         &nbsp;Add New Post</a></li>
-        <li class="active"><a href="ManageAdmin.php">
+        <li class="active"><a href="manageAdmin">
         <span class="glyphicon glyphicon-user"></span>
         &nbsp;Manage Admins</a></li>
-        <li><a href="Comments.php">
+        <li><a href="comments">
         <span class="glyphicon glyphicon-comment"></span>
         &nbsp;Comments
         <?php
@@ -131,7 +140,7 @@ if(isset($_POST["Submit"])){
         <li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
         &nbsp;Live Blog</a></li>
-        <li><a href="Logout.php">
+        <li><a href="logout">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
         
@@ -145,7 +154,7 @@ if(isset($_POST["Submit"])){
                     echo SuccessMessage();
          ?></div>
         <div>
-        <form action="ManageAdmin.php" method="post">
+        <form action="manageAdmin" method="post">
         <fieldset>
             <div class="form-group">
             <label for="Username"><span>Username:</span></label>
@@ -157,6 +166,7 @@ if(isset($_POST["Submit"])){
             </div>
             <div class="form-group">
             <label for="ConfirmPassword"><span>Confirm Password:</span></label>
+            <input type="hidden" name="csrf_token" value="<?php echo generateToken('protectedManageAdmin'); ?>"/>
             <input class="form-control" type="Password" name="ConfirmPassword" id="ConfirmPassword" placeholder="Retype Same Password">
             </div>
             <br>
@@ -195,7 +205,7 @@ while($DataRows=mysqli_fetch_array($Execute)){
         <td><?php echo $DateTime;?></td>
         <td><?php echo $AdminName;?>.</td>
         <td><?php echo $AddedBy;?></td>
-        <td><a href="DeleteAdmin.php?id=<?php echo $Id;?>">
+        <td><a href="deleteAdmin?id=<?php echo $Id;?>">
         <span class="btn btn-danger">Delete</span>
         
 </a>

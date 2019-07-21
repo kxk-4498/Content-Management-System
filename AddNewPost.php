@@ -1,43 +1,61 @@
 <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
-<?php Confirm_Login(); ?>
+<?php Confirm_Login();
+    Confirm_Admin();
+?>
 <?php
 if(isset($_POST["Submit"])){
-    global $connection;
-    $Title=mysqli_real_escape_string($connection,$_POST["Title"]);
-    $Category=mysqli_real_escape_string($connection,$_POST["Category"]);
-    $Post=mysqli_real_escape_string($connection,$_POST["Post"]);
-    date_default_timezone_set("Asia/Kolkata");
-    $CurrentTime=time();
-    $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
-    $DateTime;
-    $Admin=$_SESSION["Username"];
-    $Image=$_FILES["Image"]["name"];
-    $Target="Upload/".basename($_FILES["Image"]["name"]);
-    if(empty($Title)){
-        $_SESSION["ErrorMessage"]="Title can't be empty!";
-        Redirect_to("AddNewPost.php");
-    }elseif(strlen($Title)<4){
-        $_SESSION["ErrorMessage"]="Title should be more than 3 characters";
-        Redirect_to("AddNewPost.php");
-    }else{
-        global $connection;
-        $Query="INSERT INTO admin_panel(datetime,category,title,author,image,post)
-        VALUES('$DateTime','$Category','$Title','$Admin','$Image','$Post')";
-        $Execute=mysqli_query($connection,$Query);
-        move_uploaded_file($_FILES["Image"]["tmp_name"],$Target);
-        if($Execute){
-            $_SESSION["SuccessMessage"]="Post added successfully";
-            Redirect_to("AddNewPost.php");
-
+    if(!empty($_REQUEST['csrf_token'])){
+        if( checkToken($_REQUEST['csrf_token'], 'protectedAddNewPostForm')) {
+            global $connection;
+            $Title=mysqli_real_escape_string($connection,$_POST["Title"]);
+            $Title=htmlentities(htmlspecialchars($Title, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            $Category=mysqli_real_escape_string($connection,$_POST["Category"]);
+            $Category=htmlentities(htmlspecialchars($Category, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            $Post=mysqli_real_escape_string($connection,$_POST["Post"]);
+            $Post=htmlentities(htmlspecialchars($Post, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            date_default_timezone_set("Asia/Kolkata");
+            $CurrentTime=time();
+            $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
+            $DateTime;
+            $Admin=$_SESSION["Username"];
+            $Image=$_FILES["Image"]["name"];
+            $Target="Upload/".basename($_FILES["Image"]["name"]);
+            if(empty($Title)){
+                $_SESSION["ErrorMessage"]="Title can't be empty!";
+        
+                Redirect_to("addNewPost");
+            }elseif(strlen($Title)<4){
+                $_SESSION["ErrorMessage"]="Title should be more than 3 characters";
+                Redirect_to("addNewPost");
+            }else{
+                global $connection;
+                $allowed_mime = array('image/jpeg','image/gif','image/png');
+                $mimeType = mime_content_type($_FILES['Image']['tmp_name']);
+                if(in_array($mimeType, $allowed_mime)){
+                    $Query="INSERT INTO admin_panel(datetime,category,title,author,image,post)
+                    VALUES('$DateTime','$Category','$Title','$Admin','$Image','$Post')";
+                    $Execute=mysqli_query($connection,$Query);
+                    move_uploaded_file($_FILES["Image"]["tmp_name"],$Target);
+                    if($Execute){
+                        $_SESSION["SuccessMessage"]="Post added successfully";
+                        Redirect_to("addNewPost");
+        
+                    }else{
+                        $_SESSION["ErrorMessage"]="Something went wrong!";
+                        Redirect_to("addNewPost");
+                    }
+                }else{
+                    $_SESSION["ErrorMessage"]="Only png, jpeg, jpg and gif supported.";
+                    Redirect_to("addNewPost");
+                }
+            }
         }else{
             $_SESSION["ErrorMessage"]="Something went wrong!";
-            Redirect_to("AddNewPost.php");
-
+            Redirect_to("addNewPost");
+        }
     }
-}
-
 }
 
 ?>
@@ -77,20 +95,20 @@ if(isset($_POST["Submit"])){
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="Portal.php">
+        <a class="navbar-brand" href="portal">
         <img style="margin-top: -12px;" src="images/maha.jfif" width=40;height=7;>
         </a>
         </div>
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
             <li><a href="#">Home</a></li>
-            <li class="active"><a href="Portal.php">Portal</a></li>
+            <li class="active"><a href="portal">Portal</a></li>
             <li><a href="#">About Us</a></li>
             <li><a href="#">Services</a></li>
             <li><a href="#">Contact Us</a></li>
             <li><a href="#">Feature</a></li>
         </ul>
-        <form action="Portal.php" class="navbar-form navbar-right">
+        <form action="portal" class="navbar-form navbar-right">
         <div class="form-group">
         <input type="text" class="form-control" placeholder="Search" name="Search">
         </div>
@@ -104,19 +122,19 @@ if(isset($_POST["Submit"])){
     <div class="col-sm-2">
     <br><br>
         <ul id="Side_Menu" class="nav nav-pills nav-stacked">
-        <li><a href="Dashboard.php">
+        <li><a href="dashboard">
         <span class="glyphicon glyphicon-th"></span>
         &nbsp;Dashboard</a></li>
-        <li><a href="Categories.php">
+        <li><a href="categories">
         <span class="glyphicon glyphicon-tags"></span>
         &nbsp;Categories</a></li>
-        <li class="active"><a href="AddNewPost.php">
+        <li class="active"><a href="addNewPost">
         <span class="glyphicon glyphicon-list-alt"></span>
         &nbsp;Add New Post</a></li>
-        <li><a href="ManageAdmin.php">
+        <li><a href="manageAdmin">
         <span class="glyphicon glyphicon-user"></span>
         &nbsp;Manage Admins</a></li>
-        <li><a href="Comments.php">
+        <li><a href="comments">
         <span class="glyphicon glyphicon-comment"></span>
         &nbsp;Comments
         <?php
@@ -132,7 +150,7 @@ if(isset($_POST["Submit"])){
         <li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
         &nbsp;Live Blog</a></li>
-        <li><a href="Logout.php">
+        <li><a href="logout">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
         
@@ -146,7 +164,7 @@ if(isset($_POST["Submit"])){
                     echo SuccessMessage();
          ?>
         <div>
-        <form action="AddNewPost.php" method="post" enctype="multipart/form-data">
+        <form action="addNewPost" method="post" enctype="multipart/form-data">
         <fieldset>
             <div class="form-group">
             <label for="title"><span class="FieldInfo">Title:</span></label>
@@ -172,6 +190,7 @@ while($DataRows=mysqli_fetch_array($Execute)){
             <div class="form-group">
             <label for="imageselect"><span class="FieldInfo">Select Image:</span></label>
             <input type="File" class="form-control" name="Image" id="imageselect">
+            <input type="hidden" name="csrf_token" value="<?php echo generateToken('protectedAddNewPostForm'); ?>"/>
             </div>
             <div class="form-group">
             <label for="postarea"><span class="FieldInfo">Post:</span></label>

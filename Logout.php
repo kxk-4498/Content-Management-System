@@ -3,7 +3,7 @@
 <?php
  $_SESSION["User_Id"]=null;
  session_destroy();
- Redirect_to("Login.php");
+ Redirect_to("login");
 
 
 ?>

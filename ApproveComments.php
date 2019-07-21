@@ -5,9 +5,9 @@
 <?php
 if(isset($_GET["id"])){
     global $connection;
-    $IDFromURL=$_GET["id"];
+    $IdFromURL=mysqli_real_escape_string($connection, $_REQUEST["id"]);
     $Admin=$_SESSION["Username"];
-    $Query="UPDATE comments SET status='ON', approvedby='$Admin' WHERE id='$IDFromURL'";
+    $Query="UPDATE comments SET status='ON', approvedby='$Admin' WHERE id='$IdFromURL'";
     $Execute=mysqli_query($connection,$Query);
     if($Execute){
         $_SESSION["SuccessMessage"]="Comment Approved successfully";

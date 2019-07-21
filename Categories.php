@@ -6,6 +6,7 @@
 if(isset($_POST["Submit"])){
     global $connection;
     $Category=mysqli_real_escape_string($connection,$_POST["Category"]);
+    $Category=htmlentities(htmlspecialchars($Category, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     date_default_timezone_set("Asia/Kolkata");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
@@ -13,10 +14,10 @@ if(isset($_POST["Submit"])){
     $Admin=$_SESSION["Username"];
     if(empty($Category)){
         $_SESSION["ErrorMessage"]="all feilds must be filled out";
-        Redirect_to("Categories.php");
+        Redirect_to("categories");
     }elseif(strlen($Category)>30){
         $_SESSION["ErrorMessage"]="too long name";
-        Redirect_to("Categories.php");
+        Redirect_to("categories");
     }else{
         global $connection;
         $Query="INSERT INTO category(datetime,name,creatorname)
@@ -24,11 +25,11 @@ if(isset($_POST["Submit"])){
         $Execute=mysqli_query($connection,$Query);
         if($Execute){
             $_SESSION["SuccessMessage"]="category added successfully";
-            Redirect_to("Categories.php");
+            Redirect_to("categories");
 
         }else{
             $_SESSION["ErrorMessage"]="Category failed to add";
-            Redirect_to("Categories.php");
+            Redirect_to("categories");
 
     }
 }
@@ -67,20 +68,20 @@ if(isset($_POST["Submit"])){
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="Portal.php">
+        <a class="navbar-brand" href="portal">
         <img style="margin-top: -12px;" src="images/maha.jfif" width=40;height=7;>
         </a>
         </div>
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
             <li><a href="#">Home</a></li>
-            <li class="active"><a href="Portal.php">Portal</a></li>
+            <li class="active"><a href="portal">Portal</a></li>
             <li><a href="#">About Us</a></li>
             <li><a href="#">Services</a></li>
             <li><a href="#">Contact Us</a></li>
             <li><a href="#">Feature</a></li>
         </ul>
-        <form action="Portal.php" class="navbar-form navbar-right">
+        <form action="portal" class="navbar-form navbar-right">
         <div class="form-group">
         <input type="text" class="form-control" placeholder="Search" name="Search">
         </div>
@@ -94,19 +95,19 @@ if(isset($_POST["Submit"])){
     <div class="col-sm-2">
     <br><br>
         <ul id="Side_Menu" class="nav nav-pills nav-stacked">
-        <li><a href="Dashboard.php">
+        <li><a href="dashboard">
         <span class="glyphicon glyphicon-th"></span>
         &nbsp;Dashboard</a></li>
-        <li class="active"><a href="Categories.php">
+        <li class="active"><a href="categories">
         <span class="glyphicon glyphicon-tags"></span>
         &nbsp;Categories</a></li>
-        <li><a href="AddNewPost.php">
+        <li><a href="addNewPost">
         <span class="glyphicon glyphicon-list-alt"></span>
         &nbsp;Add New Post</a></li>
-        <li><a href="ManageAdmin.php">
+        <li><a href="manageAdmin">
         <span class="glyphicon glyphicon-user"></span>
         &nbsp;Manage Admins</a></li>
-        <li><a href="Comments.php">
+        <li><a href="comments">
         <span class="glyphicon glyphicon-comment"></span>
         &nbsp;Comments
         <?php
@@ -122,7 +123,7 @@ if(isset($_POST["Submit"])){
         <li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
         &nbsp;Live Blog</a></li>
-        <li><a href="Logout.php">
+        <li><a href="logout">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
         
@@ -136,7 +137,7 @@ if(isset($_POST["Submit"])){
                     echo SuccessMessage();
          ?></div>
         <div>
-        <form action="Categories.php" method="post">
+        <form action="categories" method="post">
         <fieldset>
             <div class="form-group">
             <label for="categoryname"><span>Name:</span></label>
@@ -178,7 +179,7 @@ while($DataRows=mysqli_fetch_array($Execute)){
         <td><?php echo $DateTime;?></td>
         <td><?php echo $CategoryName;?>.</td>
         <td><?php echo $CreatorName;?></td>
-        <td><a href="DeleteCategory.php?id=<?php echo $Id;?>">
+        <td><a href="deleteCategory?id=<?php echo $Id;?>">
         <span class="btn btn-danger">Delete</span>
         
 </a>

@@ -8,19 +8,26 @@ if(isset($_POST["Submit"])){
     $Password=mysqli_real_escape_string($connection,$_POST["Password"]);
     if(empty($Username)||empty($Password)){
         $_SESSION["ErrorMessage"]="All feilds must be filled out";
-        Redirect_to("Login.php");
+        Redirect_to("login");
     }
     else{
         $Found_Account=Login_Attempt($Username,$Password);
         $_SESSION["User_Id"]=$Found_Account["id"];
         $_SESSION["Username"]=$Found_Account["username"];
+        $_SESSION['UserType']=$Found_Account['user_type'];
         if($Found_Account){
-            $_SESSION["SuccessMessage"]="Welcome {$_SESSION["Username"]}";
-            Redirect_to("Dashboard.php");
+            if($Found_Account["user_type"]==0){
+                $_SESSION["SuccessMessage"]="Welcome {$_SESSION["Username"]}";
+                Redirect_to("dashboard");
+            }elseif($Found_Account["user_type"]==1){
+                $_SESSION["SuccessMessage"]="Welcome {$_SESSION["Username"]}";
+                Redirect_to("auther_dashboard");
+            }
+            
 
         }else{
             $_SESSION["ErrorMessage"]="Invalid Email or Password!";
-            Redirect_to("Login.php");
+            Redirect_to("login");
 
     }
 }

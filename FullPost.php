@@ -4,33 +4,40 @@
 
 <?php
 if(isset($_POST["Submit"])){
-    global $connection;
-    $Name=mysqli_real_escape_string($connection,$_POST["Name"]);
-    $Email=mysqli_real_escape_string($connection,$_POST["Email"]);
-    $Comment=mysqli_real_escape_string($connection,$_POST["Comment"]);
-    date_default_timezone_set("Asia/Kolkata");
-    $CurrentTime=time();
-    $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
-    $DateTime;
-    $PostID=mysqli_real_escape_string($connection, $_REQUEST["id"]);
-    if(empty($Name)||empty($Email)||empty($Comment)){
-        $_SESSION["ErrorMessage"]="all feilds are required.";
-    }elseif(strlen($Comment)>500){
-        $_SESSION["ErrorMessage"]="Comment should be no more than 500 characters";
-    }else{
-        global $connection;
-        $PostIDFromURL=$_GET['id'];
-        $Query="INSERT INTO comments (datetime,name,email,comment,status,admin_panel_id,approvedby)
-        VALUES ('$DateTime','$Name','$Email','$Comment','OFF','$PostIDFromURL','pending')";
-        $Execute=mysqli_query($connection,$Query);
-        if($Execute){
-            $_SESSION["SuccessMessage"]="Comment submitted successfully";
-            Redirect_to("FullPost.php?id={$PostID}");
-        }else{
-            $_SESSION["ErrorMessage"]="Something went wrong!";
-            Redirect_to("FullPost.php?id={$PostID}");
+    if(!empty($_REQUEST['csrf_token'])){
+        if( checkToken($_REQUEST['csrf_token'], 'protectedComment')) {
+            global $connection;
+            $Name=mysqli_real_escape_string($connection,$_POST["Name"]);
+            $Name=htmlentities(htmlspecialchars($Name, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            $Email=mysqli_real_escape_string($connection,$_POST["Email"]);
+            $Email=htmlentities(htmlspecialchars($Email, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            $Comment=mysqli_real_escape_string($connection,$_POST["Comment"]);
+            $Comment=htmlentities(htmlspecialchars($Comment, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            date_default_timezone_set("Asia/Kolkata");
+            $CurrentTime=time();
+            $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
+            $DateTime;
+            $PostID=mysqli_real_escape_string($connection, $_REQUEST["id"]);
+            if(empty($Name)||empty($Email)||empty($Comment)){
+                $_SESSION["ErrorMessage"]="all feilds are required.";
+            }elseif(strlen($Comment)>500){
+                $_SESSION["ErrorMessage"]="Comment should be no more than 500 characters";
+            }else{
+                global $connection;
+                $PostIDFromURL=$_GET['id'];
+                $Query="INSERT INTO comments (datetime,name,email,comment,status,admin_panel_id,approvedby)
+                VALUES ('$DateTime','$Name','$Email','$Comment','OFF','$PostIDFromURL','pending')";
+                $Execute=mysqli_query($connection,$Query);
+                if($Execute){
+                    $_SESSION["SuccessMessage"]="Comment submitted successfully";
+                    Redirect_to("fullPost?id={$PostID}");
+                }else{
+                    $_SESSION["ErrorMessage"]="Something went wrong!";
+                    Redirect_to("fullPost?id={$PostID}");
+                }   
+            }
+        }
     }
-}
 }
 ?>
 <!DOCTYPE>
@@ -75,20 +82,20 @@ if(isset($_POST["Submit"])){
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="Portal.php">
+        <a class="navbar-brand" href="portal">
         <img style="margin-top: -12px;" src="images/maha.jfif" width=40;height=7;>
         </a>
         </div>
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
             <li><a href="#">Home</a></li>
-            <li class="active"><a href="Portal.php">Portal</a></li>
+            <li class="active"><a href="portal">Portal</a></li>
             <li><a href="#">About Us</a></li>
             <li><a href="#">Services</a></li>
             <li><a href="#">Contact Us</a></li>
             <li><a href="#">Feature</a></li>
         </ul>
-        <form action="Portal.php" class="navbar-form navbar-right">
+        <form action="portal" class="navbar-form navbar-right">
         <div class="form-group">
         <input type="text" class="form-control" placeholder="Search" name="Search">
         </div>
@@ -170,7 +177,7 @@ if(isset($_POST["Submit"])){
             <br>
             <span class ="FieldInfo">Share your thoughts about this post</span>
             <div>
-        <form action="FullPost.php?id=<?php echo $_REQUEST["id" ]; ?>" method="post" enctype="multipart/form-data">
+        <form action="fullPost?id=<?php echo $_REQUEST["id" ]; ?>" method="post" enctype="multipart/form-data">
         <fieldset>
             <div class="form-group">
             <label for="Name"><span  class="FieldInfo">Name:</span></label>
@@ -179,6 +186,7 @@ if(isset($_POST["Submit"])){
             <div class="form-group">
             <label for="Email"><span  class="FieldInfo">Email:</span></label>
             <input class="form-control" type="email" name="Email" id="Email" placeholder="Email">
+            <input type="hidden" name="csrf_token" value="<?php echo generateToken('protectedComment'); ?>"/>
             </div>
             <div class="form-group">
             <label for="commentarea"><span class="FieldInfo">Comment</span></label>

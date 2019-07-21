@@ -5,16 +5,16 @@
 <?php
 if(isset($_GET["id"])){
     global $connection;
-    $IDFromURL=$_GET["id"];
-    $Query="DELETE FROM comments WHERE id='$IDFromURL'";
+    $IdFromURL=mysqli_real_escape_string($connection, $_REQUEST["id"]);
+    $Query="DELETE FROM comments WHERE id='$IdFromURL'";
     $Execute=mysqli_query($connection,$Query);
     if($Execute){
-        $_SESSION["SuccessMessage"]="Comment Deleted successfully";
-        Redirect_to("Comments.php");
+        $_SESSION["SuccessMessage"]="Comment Deleted successfully".$ID;
+        Redirect_to("comments");
 
     }else{
         $_SESSION["ErrorMessage"]="Something went wrong! Try Again!!";
-        Redirect_to("Comments.php");
+        Redirect_to("comments");
 
 }
 

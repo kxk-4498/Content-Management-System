@@ -35,7 +35,7 @@
             <li><a href="#">Contact Us</a></li>
             <li><a href="#">Feature</a></li>
         </ul>
-        <form action="Portal.php" class="navbar-form navbar-right">
+        <form method="POST" action="Portal.php" class="navbar-form navbar-right">
         <div class="form-group">
         <input type="text" class="form-control" placeholder="Search" name="Search">
         </div>
@@ -53,9 +53,8 @@
             <?php
             global $connection;
             //query when search button active
-            if(isset($_GET["SearchButton"])){
-                $Search=$_GET["Search"];
-                
+            if(isset($_REQUEST["SearchButton"])){
+                $Search=mysqli_real_escape_string($connection, $_REQUEST["Search"]);
                 $ViewQuery="SELECT * FROM admin_panel 
                 WHERE datetime LIKE '%$Search%' OR title LIKE '%$Search%'
                 OR category LIKE '%$Search%' or post LIKE '%$Search$'";    
@@ -100,7 +99,7 @@
             
             echo $Post; ?> </p>  
             </div>
-            <a href="FullPost.php?id=<?php echo $postId; ?>"><span class="btn btn-info">
+            <a href="fullPost?id=<?php echo $postId; ?>"><span class="btn btn-info">
                 Read More &rsaquo;</span></a>
             </div>
             <?php } ?>

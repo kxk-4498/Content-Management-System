@@ -33,20 +33,20 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="Portal.php">
+        <a class="navbar-brand" href="portal">
         <img style="margin-top: -12px;" src="images/maha.jfif" width=40;height=7;>
         </a>
         </div>
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
             <li><a href="#">Home</a></li>
-            <li class="active"><a href="Portal.php" target="_blank">Portal</a></li>
+            <li class="active"><a href="portal" target="_blank">Portal</a></li>
             <li><a href="#">About Us</a></li>
             <li><a href="#">Services</a></li>
             <li><a href="#">Contact Us</a></li>
             <li><a href="#">Feature</a></li>
         </ul>
-        <form action="Portal.php" class="navbar-form navbar-right">
+        <form action="portal" class="navbar-form navbar-right">
         <div class="form-group">
         <input type="text" class="form-control" placeholder="Search" name="Search">
         </div>
@@ -63,16 +63,16 @@
     <div class="col-sm-2">
     <br><br>
     <ul id="Side_Menu" class="nav nav-pills nav-stacked">
-        <li><a href="Dashboard.php">
+        <li><a href="dashboard">
         <span class="glyphicon glyphicon-th"></span>
         &nbsp;Dashboard</a></li>
-        <li><a href="Categories.php">
+        <li><a href="categories">
         <span class="glyphicon glyphicon-tags"></span>
         &nbsp;Categories</a></li>
-        <li><a href="AddNewPost.php">
+        <li><a href="addNewPost">
         <span class="glyphicon glyphicon-list-alt"></span>
         &nbsp;Add New Post</a></li>
-        <li><a href="ManageAdmin.php">
+        <li><a href="manageAdmin">
         <span class="glyphicon glyphicon-user"></span>
         &nbsp;Manage Admins</a></li>
         <li  class="active"><a href="Comments.php">
@@ -91,7 +91,7 @@
         <li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
         &nbsp;Live Blog</a></li>
-        <li><a href="Logout.php">
+        <li><a href="logout">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
         
@@ -146,15 +146,15 @@
                     echo htmlentities($PersonComments);?></td>
                     <td><?php echo  htmlentities($ApprovedBy); ?></td>
                     <td>
-                    <a href="ApproveComments.php?id=<?php echo $CommentId;?>">
+                    <a href="approveComments?id=<?php echo $CommentId;?>">
                     <span class="btn btn-success">Approve</span>
                     </a></td>
                     <td>
-                    <a href="DeleteComments.php?id=<?php echo $CommentId;?>">
+                    <a href="deleteComments?id=<?php echo $CommentId;?>">
                     <span class="btn btn-danger">Delete</span>
                     </a>
                     </td>
-                    <td><a href="FullPost.php?id=<?php echo $CommentedPostId;?>" target="_blank"><span class="btn btn-primary">Live Preview</span></td></a>
+                    <td><a href="fullPost?id=<?php echo $CommentedPostId;?>" target="_blank"><span class="btn btn-primary">Live Preview</span></td></a>
                     </tr>
 
 
@@ -205,15 +205,15 @@
                     echo htmlentities($PersonComments);?></td>
                     <td><?php echo  htmlentities($DisApprovedBy); ?></td>
                     <td>
-                    <a href=DisApproveComments.php?id=<?php echo $CommentId;?>">
+                    <a href=disApproveComments?id=<?php echo $CommentId;?>">
                     <span class="btn btn-warning">Dis-Approve</span>
                     </a></td>
                     <td>
-                    <a href="DeleteComments.php?id=<?php echo $CommentId;?>">
+                    <a href="deleteComments?id=<?php echo $CommentId;?>">
                     <span class="btn btn-danger">Delete</span>
                     </a>
                     </td>
-                    <td><a href="FullPost.php?id=<?php echo $CommentedPostId;?>" target="_blank"><span class="btn btn-primary">Live Preview</span></td></a>
+                    <td><a href="fullPost?id=<?php echo $CommentedPostId;?>" target="_blank"><span class="btn btn-primary">Live Preview</span></td></a>
                     </tr>
 
 

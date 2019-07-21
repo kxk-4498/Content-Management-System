@@ -17,10 +17,10 @@ if(isset($_POST["Submit"])){
     $Target="Upload/".basename($_FILES["Image"]["name"]);
     if(empty($Title)){
         $_SESSION["ErrorMessage"]="Title can't be empty!";
-        Redirect_to("EditPost.php");
+        Redirect_to("editPost");
     }elseif(strlen($Title)<4){
         $_SESSION["ErrorMessage"]="Title should be more than 3 characters";
-        Redirect_to("EditPost.php");
+        Redirect_to("editPost");
     }else{
         global $connection;
         $EditFromURL=$_GET['Edit'];
@@ -31,11 +31,11 @@ if(isset($_POST["Submit"])){
         move_uploaded_file($_FILES["Image"]["tmp_name"],$Target);
         if($Execute){
             $_SESSION["SuccessMessage"]="Post Updated successfully";
-            Redirect_to("Dashboard.php");
+            Redirect_to("dashboard");
 
         }else{
             $_SESSION["ErrorMessage"]="Something went wrong!";
-            Redirect_to("Dashboard.php");
+            Redirect_to("dashboard");
 
     }
 }
@@ -106,19 +106,19 @@ if(isset($_POST["Submit"])){
     <div class="col-sm-2">
     <br><br>
     <ul id="Side_Menu" class="nav nav-pills nav-stacked">
-        <li><a href="Dashboard.php">
+        <li><a href="dashboard">
         <span class="glyphicon glyphicon-th"></span>
         &nbsp;Dashboard</a></li>
-        <li><a href="Categories.php">
+        <li><a href="categories">
         <span class="glyphicon glyphicon-tags"></span>
         &nbsp;Categories</a></li>
-        <li class="active"><a href="EditPost.php">
+        <li class="active"><a href="editPost">
         <span class="glyphicon glyphicon-list-alt"></span>
         &nbsp;Edit Post</a></li>
-        <li><a href="ManageAdmin.php">
+        <li><a href="manageAdmin">
         <span class="glyphicon glyphicon-user"></span>
         &nbsp;Manage Admins</a></li>
-        <li><a href="Comments.php">
+        <li><a href="comments">
         <span class="glyphicon glyphicon-comment"></span>
         &nbsp;Comments
         <?php
@@ -135,7 +135,7 @@ if(isset($_POST["Submit"])){
         <li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
         &nbsp;Live Blog</a></li>
-        <li><a href="Logout.php">
+        <li><a href="logout">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
         
@@ -150,10 +150,14 @@ if(isset($_POST["Submit"])){
          ?>
         <div>
         <?php
-            $SearchQueryParameter=$_GET['Edit'];
-            global $connection;
+                    global $connection;
+            $SearchQueryParameter=mysqli_real_escape_string($connection,$_REQUEST['Edit']);
             $ViewQuery="SELECT * FROM admin_panel WHERE id='$SearchQueryParameter'";
             $Execute=mysqli_query($connection,$ViewQuery);
+            $TitleUpdate=NULL;
+            $CategoryUpdate=NULL;
+            $ImageUpdate=NULL;
+            $PostUpdate=NULL;
             while($DataRows=mysqli_fetch_array($Execute)){
                 $TitleUpdate=$DataRows['title'];
                 $CategoryUpdate=$DataRows["category"];
@@ -162,7 +166,7 @@ if(isset($_POST["Submit"])){
             }
             
             ?>
-        <form action="EditPost.php?Edit=<?php echo $SearchQueryParameter; ?>" method="post" enctype="multipart/form-data">
+        <form action="editPost?Edit=<?php echo $SearchQueryParameter; ?>" method="post" enctype="multipart/form-data">
         <fieldset>
             <div class="form-group">
             <label for="title"><span class="FieldInfo">Title:</span></label>

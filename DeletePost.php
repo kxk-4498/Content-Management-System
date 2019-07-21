@@ -20,7 +20,7 @@ if(isset($_POST["Submit"])){
         Redirect_to("Delete.php");
     }elseif(strlen($Title)<4){
         $_SESSION["ErrorMessage"]="Title should be more than 3 characters";
-        Redirect_to("DeletePost.php");
+        Redirect_to("deletePost");
     }else{
         global $connection;
         $DeleteFromURL=$_GET['Delete'];
@@ -110,7 +110,7 @@ if(isset($_POST["Submit"])){
         <li><a href="Categories.php">
         <span class="glyphicon glyphicon-tags"></span>
         &nbsp;Categories</a></li>
-        <li class="active"><a href="DeletePost.php">
+        <li class="active"><a href="deletePost">
         <span class="glyphicon glyphicon-list-alt"></span>
         &nbsp;Delete Post</a></li>
         <li><a href="ManageAdmin.php">
@@ -148,8 +148,8 @@ if(isset($_POST["Submit"])){
          ?>
         <div>
         <?php
-            $SearchQueryParameter=$_GET['Delete'];
             global $connection;
+            $SearchQueryParameter=mysqli_real_escape_string($connection, $_GET['Delete']);
             $ViewQuery="SELECT * FROM admin_panel WHERE id='$SearchQueryParameter'";
             $Execute=mysqli_query($connection,$ViewQuery);
             while($DataRows=mysqli_fetch_array($Execute)){
@@ -160,7 +160,7 @@ if(isset($_POST["Submit"])){
             }
             
             ?>
-        <form action="DeletePost.php?Delete=<?php echo $SearchQueryParameter; ?>" method="post" enctype="multipart/form-data">
+        <form action="deletePost?Delete=<?php echo $SearchQueryParameter; ?>" method="post" enctype="multipart/form-data">
         <fieldset>
             <div class="form-group">
             <label for="title"><span class="FieldInfo">Title:</span></label>
