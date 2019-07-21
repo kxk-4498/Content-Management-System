@@ -33,20 +33,36 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="Portal.php">
+        <a class="navbar-brand" href="portal">
         <img style="margin-top: -12px;" src="images/maha.jfif" width=40;height=7;>
         </a>
         </div>
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
-            <li class="active"><a href="Portal.php" target="_blank">Portal</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <li class="active"><a href="#">Home</a></li>
+            <li ><a href="portal" target="_blank">Portal</a></li>
+            <li><a href="aboutus">About Us</a></li>                                        
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Services <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+            <?php
+                    global $connection;
+                    $ViewQuery="SELECT * FROM category ORDER BY datetime desc";
+                    $Execute=mysqli_query($connection,$ViewQuery);
+                    while($DataRows=mysqli_fetch_array($Execute)){
+                        $Id=$DataRows["id"];
+                        $CategoryName=$DataRows["name"];
+                        echo "<li><a href='portal?Search=".$CategoryName."&SearchButton='>".$CategoryName."</a></li>";
+                    }
+            ?>
+            </ul>
+            </li>
+      
+            <!-- <li><a href="#">Contact Us</a></li> -->
             <li><a href="#">Feature</a></li>
         </ul>
-        <form action="Portal.php" class="navbar-form navbar-right">
+        <form action="portal" class="navbar-form navbar-right">
         <div class="form-group">
         <input type="text" class="form-control" placeholder="Search" name="Search">
         </div>
@@ -162,15 +178,15 @@
             </td>
             <td>
             <?php if($status=='0'){ ?>
-            <a href="EditPost.php?Edit=<?php echo $Id;?>">
+            <a href="editPost?Edit=<?php echo $Id;?>">
             <span class="btn btn-warning">Edit</span>
             </a>
-            <a href="DeletePost.php?Delete=<?php echo $Id;?>">
+            <a href="deletePost?Delete=<?php echo $Id;?>">
             <span class="btn btn-danger">Delete</span>
             </a>
             <?php } ?>
             </td>
-            <td><a href="FullPost?id=<?php echo $Id;?>" target="_blank"><span class="btn btn-primary">Live Preview</span></td></a>
+            <td><a href="fullPost?id=<?php echo $Id;?>" target="_blank"><span class="btn btn-primary">Live Preview</span></td></a>
 
             </tr>
 <?php } ?>

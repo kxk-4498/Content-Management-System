@@ -5,15 +5,15 @@
 
 <html>
     <head>
-        <title>Portal Page</title>
+        <title>Portal</title>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="css/publicstyles.css">
     </head>
     <body>
-<div style="height: 10px;background: #27aae1;"></div>
-<nav class ="navbar navbar-inverse" role="navigation">
+<!-- <div style="height: 12px;background: #27aae1;"></div> -->
+<nav class ="navbar navbar-inverse navbar-default" role="navigation">
     <div class="container">
         <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse">
@@ -22,26 +22,44 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="Portal.php">
+        <a class="navbar-brand" href="portal">
         <img style="margin-top: -12px;" src="images/maha.jfif" width=40;height=7;>
         </a>
         </div>
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
-            <li class="active"><a href="Portal.php">Portal</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <!-- <li><a href="#">Home</a></li> -->
+            <li class="active"><a href="portal">Home</a></li>
+            <li><a href="aboutus">About Us</a></li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Services <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+            <?php
+                    global $connection;
+                    $ViewQuery="SELECT * FROM category ORDER BY datetime desc";
+                    $Execute=mysqli_query($connection,$ViewQuery);
+                    while($DataRows=mysqli_fetch_array($Execute)){
+                        $Id=$DataRows["id"];
+                        $CategoryName=$DataRows["name"];
+                        echo "<li><a href='portal?Search=".$CategoryName."&page='>".$CategoryName."</a></li>";
+                    }
+            ?>
+            </ul>
+            </li>            
+            <!-- <li><a href="#">Contact Us</a></li> -->
             <li><a href="#">Feature</a></li>
         </ul>
-        <form method="POST" action="Portal.php" class="navbar-form navbar-right">
-        <div class="form-group">
+        <form method="POST" action="portal" class="navbar-form navbar-right">
+        <div class="form-group"> 
         <input type="text" class="form-control" placeholder="Search" name="Search">
         </div>
         <button class="btn btn-default" name="SearchButton">Go</button>
         </form>
         </div>
+        <ul class="nav navbar-nav navbar-right">
+        <!-- <li><a href="login">Login</a></li> -->
+        </ul>
         </nav>
         <div class="Line" style="height: 10px;background: #27AAE1;"></div>
         <div class="container">
@@ -59,8 +77,8 @@
                 WHERE datetime LIKE '%$Search%' OR title LIKE '%$Search%'
                 OR category LIKE '%$Search%' or post LIKE '%$Search$'";    
             }//query when pagination active
-            elseif(isset($_GET["Page"])){
-                $Page=$_GET["Page"];
+            elseif(isset($_REQUEST["page"])){
+                $Page=$_REQUEST["page"];
                 if($Page==0||$Page<-1)
                 {
                     $ShowPostFrom=0;
@@ -76,6 +94,7 @@
 
             }//query for showing portal contents
             else{
+            Redirect_to('portal?page=');
             $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc LIMIT 0,5";}
             $Execute=mysqli_query($connection,$ViewQuery);
             while($DataRows=mysqli_fetch_array($Execute)){
@@ -122,10 +141,10 @@
 
             ?>
 
-            <li class="active"><a href="Portal.php?Page=<?php echo $i;?>"><?php echo $i;?></a></li>
+            <li class="active"><a href="portal?page=<?php echo $i;?>"><?php echo $i;?></a></li>
             <?php 
             }else{?>
-                <li><a href="Portal.php?Page=<?php echo $i;?>"><?php echo $i;?></a></li>
+                <li><a href="portal?page=<?php echo $i;?>"><?php echo $i;?></a></li>
         <?php
         }
      }

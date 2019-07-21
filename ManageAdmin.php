@@ -91,9 +91,24 @@ if(isset($_POST["Submit"])){
         <ul class="nav navbar-nav">
             <li><a href="#">Home</a></li>
             <li class="active"><a href="Portal.php" target="_blank">Portal</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <li><a href="aboutus">About Us</a></li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Services <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+            <?php
+                    global $connection;
+                    $ViewQuery="SELECT * FROM category ORDER BY datetime desc";
+                    $Execute=mysqli_query($connection,$ViewQuery);
+                    while($DataRows=mysqli_fetch_array($Execute)){
+                        $Id=$DataRows["id"];
+                        $CategoryName=$DataRows["name"];
+                        echo "<li><a href='portal?Search=".$CategoryName."&SearchButton='>".$CategoryName."</a></li>";
+                    }
+            ?>
+            </ul>
+            </li>            
+            <!-- <li><a href="#">Contact Us</a></li> -->
             <li><a href="#">Feature</a></li>
         </ul>
         <form action="Portal.php" class="navbar-form navbar-right">
@@ -171,6 +186,21 @@ if(isset($_POST["Submit"])){
             <input type="hidden" name="csrf_token" value="<?php echo generateToken('protectedManageAdmin'); ?>"/>
             <input class="form-control" type="Password" name="ConfirmPassword" id="ConfirmPassword" placeholder="Retype Same Password">
             </div>
+            <div class="form-group">
+            <label for="categoryselect"><span class="FieldInfo">User Type:</span></label>
+            <select class ="form-control" id="categoryselect" name="user_type">
+            <?php
+                global $connection;
+                $ViewQuery="SELECT * FROM usertype";
+                $Execute=mysqli_query($connection,$ViewQuery);
+                while($DataRows=mysqli_fetch_array($Execute)){
+                    $Id=$DataRows["id"];
+                    $title=$DataRows["title"];
+            ?>
+            <option><?php echo $title; ?></option>
+            <?php } ?>
+            </select>
+            </div>
             <br>
             <input class="btn btn-success btn-lg"type="Submit" name="Submit" value="Add New Admin">
         </fieldset>
@@ -183,6 +213,7 @@ if(isset($_POST["Submit"])){
         <th>Sr No.</th>
         <th>Date & TIme</th>
         <th>Username</th>
+        <th>User Type</th>
         <th>Added By</th>
         <th>Action</th>
     
@@ -190,7 +221,7 @@ if(isset($_POST["Submit"])){
     </tr>
 <?php
 global $connection;
-$ViewQuery="SELECT * FROM admin_registration ORDER BY datetime desc";
+$ViewQuery="SELECT * FROM admin_registration as au left join usertype as ut on au.user_type = ut.id  ORDER BY au.datetime desc";
 $Execute=mysqli_query($connection,$ViewQuery);
 $SrNo=0;
 while($DataRows=mysqli_fetch_array($Execute)){
@@ -198,14 +229,20 @@ while($DataRows=mysqli_fetch_array($Execute)){
     $DateTime=$DataRows["datetime"];
     $AdminName=$DataRows["username"];
     $AddedBy=$DataRows["addedby"]; 
+    $userType=$DataRows["title"];
     $SrNo++;
-
 
 ?>
 <tr>
         <td><?php echo $SrNo;?></td>
         <td><?php echo $DateTime;?></td>
-        <td><?php echo $AdminName;?>.</td>
+        <td><?php echo $AdminName;?></td>
+        <td><?php 
+                // $query="select * from user_type where id=$userType";
+                // $Execute=mysqli_query($connection, $query);
+                // $data = mysqli_fetch_array($Execute);
+                // $userTypetitle=$data["title"];
+        echo $userType; ?></td>
         <td><?php echo $AddedBy;?></td>
         <td><a href="deleteAdmin?id=<?php echo $Id;?>">
         <span class="btn btn-danger">Delete</span>

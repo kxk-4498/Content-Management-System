@@ -101,11 +101,26 @@ if(isset($_POST["Submit"])){
         </div>
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
-            <li class="active"><a href="portal">Portal</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <li class="active"><a href="#">Home</a></li>
+            <li ><a href="portal">Portal</a></li>
+            <li><a href="aboutus">About Us</a></li>
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            Services <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+            <?php
+                    global $connection;
+                    $ViewQuery="SELECT * FROM category ORDER BY datetime desc";
+                    $Execute=mysqli_query($connection,$ViewQuery);
+                    while($DataRows=mysqli_fetch_array($Execute)){
+                        $Id=$DataRows["id"];
+                        $CategoryName=$DataRows["name"];
+                        echo "<li><a href='portal?Search=".$CategoryName."&SearchButton='>".$CategoryName."</a></li>";
+                    }
+            ?>
+            </ul>
+            </li>            
+            <!-- <li><a href="#">Contact Us</a></li> -->
             <li><a href="#">Feature</a></li>
         </ul>
         <form action="portal" class="navbar-form navbar-right">
