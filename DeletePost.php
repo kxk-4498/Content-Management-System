@@ -1,6 +1,7 @@
 <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
+<?php Confirm_Login(); ?>
 <?php
 if(isset($_POST["Submit"])){
     global $connection;
@@ -11,7 +12,7 @@ if(isset($_POST["Submit"])){
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
     $DateTime;
-    $Admin="Kaustubh Kumar";
+    $Admin=$_SESSION["Username"];
     $Image=$_FILES["Image"]["name"];
     $Target="Upload/".basename($_FILES["Image"]["name"]);
     if(empty($Title)){
@@ -102,7 +103,7 @@ if(isset($_POST["Submit"])){
 <div class="row">
     <div class="col-sm-2">
     <br><br>
-        <ul id="Side_Menu" class="nav nav-pills nav-stacked">
+    <ul id="Side_Menu" class="nav nav-pills nav-stacked">
         <li><a href="Dashboard.php">
         <span class="glyphicon glyphicon-th"></span>
         &nbsp;Dashboard</a></li>
@@ -112,19 +113,27 @@ if(isset($_POST["Submit"])){
         <li class="active"><a href="DeletePost.php">
         <span class="glyphicon glyphicon-list-alt"></span>
         &nbsp;Delete Post</a></li>
-        <li><a href="#">
-        <span class="glyphicon glyphicon-list-alt"></span>
-        &nbsp;Add New Category</a></li>
-        <li><a href="#">
+        <li><a href="ManageAdmin.php">
         <span class="glyphicon glyphicon-user"></span>
         &nbsp;Manage Admins</a></li>
-        <li><a href="#">
+        <li><a href="Comments.php">
         <span class="glyphicon glyphicon-comment"></span>
-        &nbsp;Comments</a></li>
+        &nbsp;Comments
+        <?php
+                     global $connection;
+                     $QueryTotal="SELECT COUNT(*) FROM comments WHERE status='OFF'";
+                     $ExecuteTotal=mysqli_query($connection,$QueryTotal);
+                     $RowsTotal=mysqli_fetch_array($ExecuteTotal);
+                     $TotalUnApprovedComments=array_shift($RowsTotal);
+                ?>
+                <span class="label pull-right label-warning">
+                <?php echo $TotalUnApprovedComments; ?></span>
+            
+        </a></li>
         <li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
         &nbsp;Live Blog</a></li>
-        <li><a href="#">
+        <li><a href="Logout.php">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
         

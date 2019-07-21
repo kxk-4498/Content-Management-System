@@ -1,10 +1,11 @@
 <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
+<?php Confirm_Login(); ?>
 <?php
-if(isset($_REQUEST["id"])){
+if(isset($_GET["id"])){
     global $connection;
-    $IDFromURL=mysqli_real_escape_string($connection, $_REQUEST["id"]);
+    $IDFromURL=$_GET["id"];
     $Query="DELETE FROM comments WHERE id='$IDFromURL'";
     $Execute=mysqli_query($connection,$Query);
     if($Execute){

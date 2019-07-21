@@ -1,7 +1,7 @@
  <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
-
+<?php Confirm_Login(); ?>
 
 <!DOCTYPE>
 
@@ -92,7 +92,7 @@
         <li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
         &nbsp;Live Blog</a></li>
-        <li><a href="#">
+        <li><a href="Logout.php">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
         
@@ -140,7 +140,7 @@
             <tr>
             <td><?php echo $SrNo;?></td>
             <td style="color: #5e5eff;"><?php 
-            if(strlen($Title)>20){$Title=substr($Title,0,20)."...";}
+            if(strlen($Title)>10){$Title=substr($Title,0,10)."...";}
             echo $Title;?></td>
             <td><?php 
             if(strlen($DateTime)>11){$DateTime=substr($DateTime,0,12)."...";}
@@ -148,8 +148,10 @@
             <td><?php 
              if(strlen($Admin)>8){$Admin=substr($Admin,0,8)."...";}
             echo $Admin;?></td>
-            <td><?php echo  $Category;?></td>
-            <td><img src="upload/<?php echo $Image;?>" width="170";height="50px"></td>
+            <td><?php
+            if(strlen($Category)>10){$Category=substr($Category,0,10)."...";}
+            echo  $Category;?></td>
+            <td><img src="upload/<?php echo $Image;?>" width="100";height="30px"></td>
             <td>
                 <?php
                      global $connection;

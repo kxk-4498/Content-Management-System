@@ -1,7 +1,7 @@
 <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
-
+<?php Confirm_Login(); ?>
 
 <!DOCTYPE>
 
@@ -62,7 +62,7 @@
 
     <div class="col-sm-2">
     <br><br>
-        <ul id="Side_Menu" class="nav nav-pills nav-stacked">
+    <ul id="Side_Menu" class="nav nav-pills nav-stacked">
         <li><a href="Dashboard.php">
         <span class="glyphicon glyphicon-th"></span>
         &nbsp;Dashboard</a></li>
@@ -75,13 +75,23 @@
         <li><a href="ManageAdmin.php">
         <span class="glyphicon glyphicon-user"></span>
         &nbsp;Manage Admins</a></li>
-        <li class="active"><a href="Comments.php">
+        <li  class="active"><a href="Comments.php">
         <span class="glyphicon glyphicon-comment"></span>
-        &nbsp;Comments</a></li>
+        &nbsp;Comments
+        <?php
+                     global $connection;
+                     $QueryTotal="SELECT COUNT(*) FROM comments WHERE status='OFF'";
+                     $ExecuteTotal=mysqli_query($connection,$QueryTotal);
+                     $RowsTotal=mysqli_fetch_array($ExecuteTotal);
+                     $TotalUnApprovedComments=array_shift($RowsTotal);
+                ?>
+                <span class="label pull-right label-warning">
+                <?php echo $TotalUnApprovedComments; ?></span>
+        </a></li>
         <li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
         &nbsp;Live Blog</a></li>
-        <li><a href="#">
+        <li><a href="Logout.php">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
         
@@ -101,7 +111,7 @@
                 <th>Name</th>
                 <th>Date</th>
                 <th>Comment</th>
-                <th>Dis-Approved By</th>
+                <th>Approved By</th>
                 <th>Approve</th>
                 <th>Delete Comment</th>
                 <th>Details</th>
@@ -110,13 +120,13 @@
                  global $connection;
                  $ViewQuery="SELECT * FROM comments WHERE status='OFF' ORDER BY datetime desc";
                  $Execute=mysqli_query($connection,$ViewQuery);
-                 $Admin="Kaustubh Kumar";
                  $SrNo=0;
                  while($DataRows=mysqli_fetch_array($Execute)){
                     $CommentId=$DataRows["id"];
                     $DateTimeofComment=$DataRows["datetime"];
                     $PersonName=$DataRows["name"];
                     $PersonComments=$DataRows["comment"];
+                    $ApprovedBy=$DataRows["approvedby"];
                     $CommentedPostId=$DataRows["admin_panel_id"];
                     $SrNo++; 
                 
@@ -132,9 +142,9 @@
                     if(strlen($DateTimeofComment)>11){$DateTimeofComment=substr($DateTimeofComment,0,12)."...";}
                     echo htmlentities($DateTimeofComment);?>.</td>
                     <td><?php 
-                    if(strlen($PersonComments)>20){$PersonComments=substr($PersonComments,0,20)."...";}
+                    if(strlen($PersonComments)>10){$PersonComments=substr($PersonComments,0,10)."...";}
                     echo htmlentities($PersonComments);?></td>
-                    <td><?php echo $Admin; ?></td>
+                    <td><?php echo  htmlentities($ApprovedBy); ?></td>
                     <td>
                     <a href="ApproveComments.php?id=<?php echo $CommentId;?>">
                     <span class="btn btn-success">Approve</span>
@@ -160,7 +170,7 @@
                 <th>Name</th>
                 <th>Date</th>
                 <th>Comment</th>
-                <th>Approved By</th>
+                <th>Dis-Approved By</th>
                 <th>Revert Approve</th>
                 <th>Delete Comment</th>
                 <th>Details</th>
@@ -169,13 +179,13 @@
                  global $connection;
                  $ViewQuery="SELECT * FROM comments WHERE status='ON' ORDER BY datetime desc";
                  $Execute=mysqli_query($connection,$ViewQuery);
-                 $Admin="Kaustubh Kumar";
                  $SrNo=0;
                  while($DataRows=mysqli_fetch_array($Execute)){
                     $CommentId=$DataRows["id"];
                     $DateTimeofComment=$DataRows["datetime"];
                     $PersonName=$DataRows["name"];
                     $PersonComments=$DataRows["comment"];
+                    $DisApprovedBy=$DataRows["approvedby"];
                     $CommentedPostId=$DataRows["admin_panel_id"];
                     $SrNo++; 
                 
@@ -191,9 +201,9 @@
                     if(strlen($DateTimeofComment)>11){$DateTimeofComment=substr($DateTimeofComment,0,12)."...";}
                     echo htmlentities($DateTimeofComment);?>.</td>
                     <td><?php 
-                    if(strlen($PersonComments)>20){$PersonComments=substr($PersonComments,0,20)."...";}
+                    if(strlen($PersonComments)>10){$PersonComments=substr($PersonComments,0,10)."...";}
                     echo htmlentities($PersonComments);?></td>
-                    <td><?php echo $Admin; ?></td>
+                    <td><?php echo  htmlentities($DisApprovedBy); ?></td>
                     <td>
                     <a href=DisApproveComments.php?id=<?php echo $CommentId;?>">
                     <span class="btn btn-warning">Dis-Approve</span>

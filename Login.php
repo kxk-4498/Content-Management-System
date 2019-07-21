@@ -1,4 +1,4 @@
- <?php require_once("include/db.php");?>
+<?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
 <?php
@@ -6,38 +6,26 @@ if(isset($_POST["Submit"])){
     global $connection;
     $Username=mysqli_real_escape_string($connection,$_POST["Username"]);
     $Password=mysqli_real_escape_string($connection,$_POST["Password"]);
-    $ConfirmPassword=mysqli_real_escape_string($connection,$_POST["ConfirmPassword"]);
-    date_default_timezone_set("Asia/Kolkata");
-    $CurrentTime=time();
-    $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
-    $DateTime;
-    $Admin="Kaustubh Kumar";
-    if(empty($Username)||empty($Password)||empty($ConfirmPassword)){
-        $_SESSION["ErrorMessage"]="all feilds must be filled out";
-        Redirect_to("ManageAdmin.php");
-    }elseif(strlen($Password)<4){
-        $_SESSION["ErrorMessage"]="Atleast 4 characters of password required!";
-        Redirect_to("ManageAdmin.php");
-    }elseif($Password!==$ConfirmPassword){
-         $_SESSION["ErrorMessage"]="Password/Confirm Password does not match!";
-        Redirect_to("ManageAdmin.php");
-    }else{
-        global $connection;
-        $Query="INSERT INTO admin_registration(datetime,username,password,addedby)
-        VALUES('$DateTime','$Username','$Password','$Admin')";
-        $Execute=mysqli_query($connection,$Query);
-        if($Execute){
-            $_SESSION["SuccessMessage"]="Admin added successfully";
-            Redirect_to("ManageAdmin.php");
+    if(empty($Username)||empty($Password)){
+        $_SESSION["ErrorMessage"]="All feilds must be filled out";
+        Redirect_to("Login.php");
+    }
+    else{
+        $Found_Account=Login_Attempt($Username,$Password);
+        $_SESSION["User_Id"]=$Found_Account["id"];
+        $_SESSION["Username"]=$Found_Account["username"];
+        if($Found_Account){
+            $_SESSION["SuccessMessage"]="Welcome {$_SESSION["Username"]}";
+            Redirect_to("Dashboard.php");
 
         }else{
-            $_SESSION["ErrorMessage"]="Admin failed to add";
-            Redirect_to("ManageAdmin.php");
+            $_SESSION["ErrorMessage"]="Invalid Email or Password!";
+            Redirect_to("Login.php");
 
     }
 }
-
 }
+
 
 ?>
 
@@ -51,6 +39,11 @@ if(isset($_POST["Submit"])){
         <script src="js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="css/adminstyle.css">
         <style>
+        .FieldInfo{
+                color: rgb(251,174,44);
+                font-family: Bitter,Georgia,Times,"Times New Roman",serif;
+                font-size: 1.2em;
+            }
         .navbar-nav li{
     font-family: Bitter,Georgia,Times,"Times New Roman",serif;
     font-size: 1.2em;
@@ -95,15 +88,25 @@ body{
          ?></div>
         <h2>Welcome Back!</h2>
         <div>
-        <form action="ManageAdmin.php" method="post">
+        <form action="Login.php" method="post">
         <fieldset>
             <div class="form-group">
-            <label for="Username"><span>Username:</span></label>
+            <label for="Username"><span class="FieldInfo">Username:</span></label>
+            <div class="input-group input-group-lg">
+            <span class="input-group-addon">
+            <span class="glyphicon glyphicon-envelope text-primary" ></span>
+            </span>
             <input class="form-control" type="text" name="Username" id="Username" placeholder="Username">
             </div>
+            </div>
             <div class="form-group">
-            <label for="Password"><span>Password:</span></label>
+            <label for="Password"><span class="FieldInfo">Password:</span></label>
+            <div class="input-group input-group-lg">
+            <span class="input-group-addon">
+            <span class="glyphicon glyphicon-lock text-primary" ></span>
+            </span>
             <input class="form-control" type="Password" name="Password" id="Password" placeholder="Password">
+            </div>
             </div>
             <br>
             <input class="btn btn-info btn-block"type="Submit" name="Submit" value="Login">

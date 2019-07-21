@@ -1,6 +1,7 @@
 <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
+<?php Confirm_Login(); ?>
 <?php
 if(isset($_POST["Submit"])){
     global $connection;
@@ -9,11 +10,11 @@ if(isset($_POST["Submit"])){
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
     $DateTime;
-    $Admin="Kaustubh Kumar";
+    $Admin=$_SESSION["Username"];
     if(empty($Category)){
         $_SESSION["ErrorMessage"]="all feilds must be filled out";
         Redirect_to("Categories.php");
-    }elseif(strlen($Category)>15){
+    }elseif(strlen($Category)>30){
         $_SESSION["ErrorMessage"]="too long name";
         Redirect_to("Categories.php");
     }else{
@@ -121,7 +122,7 @@ if(isset($_POST["Submit"])){
         <li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
         &nbsp;Live Blog</a></li>
-        <li><a href="#">
+        <li><a href="Logout.php">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
         

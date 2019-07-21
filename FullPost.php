@@ -1,15 +1,13 @@
 <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
+
 <?php
 if(isset($_POST["Submit"])){
     global $connection;
     $Name=mysqli_real_escape_string($connection,$_POST["Name"]);
-    $Name=htmlentities(htmlspecialchars($Name, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     $Email=mysqli_real_escape_string($connection,$_POST["Email"]);
-    //$Email=htmlentities(htmlspecialchars($Email, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     $Comment=mysqli_real_escape_string($connection,$_POST["Comment"]);
-    $Comment=htmlentities(htmlspecialchars($Comment, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
     date_default_timezone_set("Asia/Kolkata");
     $CurrentTime=time();
     $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
@@ -17,29 +15,23 @@ if(isset($_POST["Submit"])){
     $PostID=mysqli_real_escape_string($connection, $_REQUEST["id"]);
     if(empty($Name)||empty($Email)||empty($Comment)){
         $_SESSION["ErrorMessage"]="all feilds are required.";
-
     }elseif(strlen($Comment)>500){
         $_SESSION["ErrorMessage"]="Comment should be no more than 500 characters";
-
     }else{
         global $connection;
         $PostIDFromURL=$_GET['id'];
-        $Query="INSERT INTO comments (datetime,name,email,comment,status,admin_panel_id)
-        VALUES ('$DateTime','$Name','$Email','$Comment','OFF','$PostIDFromURL')";
+        $Query="INSERT INTO comments (datetime,name,email,comment,status,admin_panel_id,approvedby)
+        VALUES ('$DateTime','$Name','$Email','$Comment','OFF','$PostIDFromURL','pending')";
         $Execute=mysqli_query($connection,$Query);
         if($Execute){
             $_SESSION["SuccessMessage"]="Comment submitted successfully";
             Redirect_to("FullPost.php?id={$PostID}");
-
         }else{
             $_SESSION["ErrorMessage"]="Something went wrong!";
             Redirect_to("FullPost.php?id={$PostID}");
-
     }
 }
-
 }
-
 ?>
 <!DOCTYPE>
 
@@ -71,7 +63,6 @@ if(isset($_POST["Submit"])){
                 font-size: 1.1en;
                 padding-bottom: 10px;
             }
-
             </style>
     </head>
     <body>
@@ -164,7 +155,6 @@ if(isset($_POST["Submit"])){
                 $CommentDate=$DataRows["datetime"];
                 $CommenterName=$DataRows["name"];
                 $CommentbyUsers=$DataRows["comment"];
-
             
             ?>
             <div class="CommentBlock">
@@ -180,7 +170,7 @@ if(isset($_POST["Submit"])){
             <br>
             <span class ="FieldInfo">Share your thoughts about this post</span>
             <div>
-        <form action="FullPost.php?id=<?php echo $_REQUEST['id']; ?>" method="post" enctype="multipart/form-data">
+        <form action="FullPost.php?id=<?php echo $_REQUEST["id" ]; ?>" method="post" enctype="multipart/form-data">
         <fieldset>
             <div class="form-group">
             <label for="Name"><span  class="FieldInfo">Name:</span></label>

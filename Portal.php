@@ -35,7 +35,7 @@
             <li><a href="#">Contact Us</a></li>
             <li><a href="#">Feature</a></li>
         </ul>
-        <form method="POST" action="Portal.php" class="navbar-form navbar-right">
+        <form action="Portal.php" class="navbar-form navbar-right">
         <div class="form-group">
         <input type="text" class="form-control" placeholder="Search" name="Search">
         </div>
@@ -52,19 +52,32 @@
             <div class="col-sm-8">
             <?php
             global $connection;
-            if(isset($_REQUEST["SearchButton"])){
-               // $Search=strip_tags(trim($_REQUEST["Search"]));
-                //echo $Search;
-                $Search = mysqli_real_escape_string($connection, $_REQUEST["Search"]);
-                //echo $Search;
-                $ViewQuery= "SELECT * FROM admin_panel 
+            //query when search button active
+            if(isset($_GET["SearchButton"])){
+                $Search=$_GET["Search"];
+                
+                $ViewQuery="SELECT * FROM admin_panel 
                 WHERE datetime LIKE '%$Search%' OR title LIKE '%$Search%'
-                OR category LIKE '%$Search%' or post LIKE '%$Search'";
-                // $ViewQuery->bindValue(':search', $Search, PDO::PARA_STR);
+                OR category LIKE '%$Search%' or post LIKE '%$Search$'";    
+            }//query when pagination active
+            elseif(isset($_GET["Page"])){
+                $Page=$_GET["Page"];
+                if($Page==0||$Page<-1)
+                {
+                    $ShowPostFrom=0;
+                }else{
+                $ShowPostFrom=($Page*5)-5;
+                }
 
-            }
+
+
+                $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc LIMIT $ShowPostFrom,5";
+
+
+
+            }//query for showing portal contents
             else{
-            $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc";}
+            $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc LIMIT 0,5";}
             $Execute=mysqli_query($connection,$ViewQuery);
             while($DataRows=mysqli_fetch_array($Execute)){
                 $postId=$DataRows["id"];
@@ -74,11 +87,6 @@
                 $Admin=$DataRows["author"];
                 $Image=$DataRows["image"];
                 $Post=$DataRows["post"];
-                // echo "PostID : ".$postId;
-                // if($postId == NULL)
-                // {
-                //     echo "No Data";
-                // }
             
             ?>
             <div class="blogpost thumbnail">
@@ -96,6 +104,37 @@
                 Read More &rsaquo;</span></a>
             </div>
             <?php } ?>
+            <nav>
+            <ul class="pagination pull left pagination-lg">
+            <?php
+            global $connection;
+            $QueryPagination="SELECT COUNT(*) FROM admin_panel";
+            $ExecutePagination=mysqli_query($connection,$QueryPagination);
+            $RowPagination=mysqli_fetch_array($ExecutePagination);
+            $TotalPosts=array_shift($RowPagination);
+            //echo $TotalPosts;
+            $PostsPerPage=$TotalPosts/5;
+            $PostsPerPage=ceil($PostsPerPage);
+            //echo $PostsPerPage;
+            for($i=1;$i<=$PostsPerPage;$i++)
+            {
+                if(isset($Page)){
+                if($i==$Page){
+
+            ?>
+
+            <li class="active"><a href="Portal.php?Page=<?php echo $i;?>"><?php echo $i;?></a></li>
+            <?php 
+            }else{?>
+                <li><a href="Portal.php?Page=<?php echo $i;?>"><?php echo $i;?></a></li>
+        <?php
+        }
+     }
+     } ?>
+            </ul>
+            </nav>
+
+
             </div><!--Main area ending-->
             <div class="col-sm-offset-1 col-sm-3">
             <h2>Test</h2>
