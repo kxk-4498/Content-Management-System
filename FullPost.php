@@ -236,7 +236,7 @@ if(isset($_POST["Submit"])){
         </div>
             </div><!--Main area ending-->
             <div class="col-sm-offset-1 col-sm-3">
-            <<h2>Maharashtra Cyber</h2>
+            <h2>Maharashtra Cyber</h2>
             <img class="img-responsive imageicon" src="images/mahapolice.png">
             <p>Maharashtra Cyber ​is a nodal agency established by the Government of Maharashtra to tackle cyber crimes and other digital threats. It is engaged in building Cyber Infrastructure for Maharashtra, including Cyber Police Stations, anti-piracy systems, predictive policing systems, awareness about cyber crimesand initiatives, etc.</p>
         <div class="panel panel-primary">

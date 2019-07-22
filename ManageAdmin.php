@@ -1,6 +1,7 @@
  <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
+
 <?php 
 Confirm_Login();
 Confirm_Admin();
@@ -38,9 +39,13 @@ if(isset($_POST["Submit"])){
                  $_SESSION["ErrorMessage"]="Password/Confirm Password does not match!";
                 Redirect_to("manageAdmin");
             }else{
+
+                // $bcrypt = new Bcrypt();
+                // $hash = $bcrypt->create('$Password');
+                $hash = password_hash($Password, PASSWORD_BCRYPT);
                 global $connection;
                 $Query="INSERT INTO admin_registration(datetime,username,password,addedby,user_type)
-                VALUES('$DateTime','$Username','$Password','$Admin',$userTypeID)";
+                VALUES('$DateTime','$Username','$hash','$Admin',$userTypeID)";
                 $Execute=mysqli_query($connection,$Query);
                 if($Execute){
                     $_SESSION["SuccessMessage"]="Admin added successfully";

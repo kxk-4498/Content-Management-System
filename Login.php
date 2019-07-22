@@ -2,7 +2,6 @@
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
 <?php
-
 if(isset($_POST["Submit"])){
     global $connection;
     $Username=mysqli_real_escape_string($connection,$_POST["Username"]);
@@ -27,7 +26,7 @@ if(isset($_POST["Submit"])){
             
 
         }else{
-            $_SESSION["ErrorMessage"]="Invalid Email or Password!";
+            $_SESSION["ErrorMessage"]="Invalid Email or Password!".$Password;
             Redirect_to("login");
 
     }
