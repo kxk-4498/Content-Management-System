@@ -18,6 +18,7 @@ if(isset($_POST["Submit"])){
             $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
             $DateTime;
             $Admin=$_SESSION["Username"];
+            $userID=$_SESSION["User_Id"];
             $Image=$_FILES["Image"]["name"];
             $Target="Upload/".basename($_FILES["Image"]["name"]);
             if(empty($Title)){
@@ -32,8 +33,8 @@ if(isset($_POST["Submit"])){
                 $allowed_mime = array('image/jpeg','image/gif','image/png');
                 $mimeType = mime_content_type($_FILES['Image']['tmp_name']);
                 if(in_array($mimeType, $allowed_mime)){
-                    $Query="INSERT INTO admin_panel(datetime,category,title,author,image,post)
-                    VALUES('$DateTime','$Category','$Title','$Admin','$Image','$Post')";
+                    $Query="INSERT INTO admin_panel(datetime,category,title,author,image,post,auther_id)
+                    VALUES('$DateTime','$Category','$Title','$Admin','$Image','$Post',$userID)";
                     $Execute=mysqli_query($connection,$Query);
                     move_uploaded_file($_FILES["Image"]["tmp_name"],$Target);
                     if($Execute){

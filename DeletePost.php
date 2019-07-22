@@ -17,7 +17,7 @@ if(isset($_POST["Submit"])){
     $Target="Upload/".basename($_FILES["Image"]["name"]);
     if(empty($Title)){
         $_SESSION["ErrorMessage"]="Title can't be empty!";
-        Redirect_to("Delete.php");
+        Redirect_to("deletePost");
     }elseif(strlen($Title)<4){
         $_SESSION["ErrorMessage"]="Title should be more than 3 characters";
         Redirect_to("deletePost");
@@ -29,11 +29,11 @@ if(isset($_POST["Submit"])){
         move_uploaded_file($_FILES["Image"]["tmp_name"],$Target);
         if($Execute){
             $_SESSION["SuccessMessage"]="Post Deleted successfully";
-            Redirect_to("Dashboard.php");
+            Redirect_to("dashboard");
 
         }else{
             $_SESSION["ErrorMessage"]="Something went wrong!";
-            Redirect_to("Dashboard.php");
+            Redirect_to("dashboard");
 
     }
 }
@@ -77,14 +77,14 @@ if(isset($_POST["Submit"])){
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="Portal.php">
+        <a class="navbar-brand" href="portal">
         <img style="margin-top: -12px;" src="images/maha.jfif" width=40;height=7;>
         </a>
         </div>
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li ><a href="Portal.php">Portal</a></li>
+            <li ><a href="portal">Portal</a></li>
             <li><a href="aboutus">About Us</a></li>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -105,7 +105,7 @@ if(isset($_POST["Submit"])){
             <!-- <li><a href="#">Contact Us</a></li> -->
             <li><a href="#">Feature</a></li>
         </ul>
-        <form action="Portal.php" class="navbar-form navbar-right">
+        <form action="portal" class="navbar-form navbar-right">
         <div class="form-group">
         <input type="text" class="form-control" placeholder="Search" name="Search">
         </div>
@@ -119,19 +119,19 @@ if(isset($_POST["Submit"])){
     <div class="col-sm-2">
     <br><br>
     <ul id="Side_Menu" class="nav nav-pills nav-stacked">
-        <li><a href="Dashboard.php">
+        <li><a href="dashboard">
         <span class="glyphicon glyphicon-th"></span>
         &nbsp;Dashboard</a></li>
-        <li><a href="Categories.php">
+        <li><a href="categories">
         <span class="glyphicon glyphicon-tags"></span>
         &nbsp;Categories</a></li>
         <li class="active"><a href="deletePost">
         <span class="glyphicon glyphicon-list-alt"></span>
         &nbsp;Delete Post</a></li>
-        <li><a href="ManageAdmin.php">
+        <li><a href="manageAdmin">
         <span class="glyphicon glyphicon-user"></span>
         &nbsp;Manage Admins</a></li>
-        <li><a href="Comments.php">
+        <li><a href="comments">
         <span class="glyphicon glyphicon-comment"></span>
         &nbsp;Comments
         <?php
@@ -148,7 +148,7 @@ if(isset($_POST["Submit"])){
         <li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
         &nbsp;Live Blog</a></li>
-        <li><a href="Logout.php">
+        <li><a href="logout">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
         

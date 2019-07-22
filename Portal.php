@@ -114,7 +114,27 @@
             
             echo $Post; ?> </p>  
             </div>
-            <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+            <div id="share-buttons">
+                <!-- Facebook -->
+                <a href="http://www.facebook.com/sharer.php?u=https://mahacyber.com&amp;fullPost?id=<?php echo $postId?>" target="_blank">
+                    <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" />
+                </a>
+                <!-- Twitter -->
+                <a href="https://twitter.com/share?url=https://mahacyber.com&amp;fullPost?id=<?php echo $postId?>" target="_blank">
+                    <img src="https://simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" />
+                </a>
+                
+                <!-- Google+ -->
+                <a href="https://plus.google.com/share?url=https://mahacyber.com&amp;fullPost?id=<?php echo $postId?>" target="_blank">
+                    <img src="https://simplesharebuttons.com/images/somacro/google.png" alt="Google" />
+                </a>
+                
+                <!-- LinkedIn -->
+                <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://mahacyber.com&amp;fullPost?id=<?php echo $postId?>" target="_blank">
+                    <img src="https://simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" />
+                </a>
+            </div>
+            <!-- <span class="glyphicon glyphicon-share" aria-hidden="true"></span> -->
             <a href="fullPost?id=<?php echo $postId; ?>"><span class="btn btn-info">
                 Read More &rsaquo;</span></a>
             </div>

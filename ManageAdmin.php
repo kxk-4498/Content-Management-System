@@ -17,12 +17,17 @@ if(isset($_POST["Submit"])){
             $Password=htmlentities(htmlspecialchars($Password, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
             $ConfirmPassword=mysqli_real_escape_string($connection,$_POST["ConfirmPassword"]);
             $ConfirmPassword=htmlentities(htmlspecialchars($ConfirmPassword, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
-        
+            $User_Type=mysqli_real_escape_string($connection,$_POST["user_type"]);
+            $User_Type=htmlentities(htmlspecialchars($User_Type, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
             date_default_timezone_set("Asia/Kolkata");
             $CurrentTime=time();
             $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
             $DateTime;
             $Admin=$_SESSION["Username"];
+            $userTypeQuery = "select * from usertype where title='$User_Type'";
+            $Execute=mysqli_query($connection, $userTypeQuery) or die("error");
+            $userTypeRow = mysqli_fetch_array($Execute);
+            $userTypeID = $userTypeRow["id"];
             if(empty($Username)||empty($Password)||empty($ConfirmPassword)){
                 $_SESSION["ErrorMessage"]="all feilds must be filled out";
                 Redirect_to("manageAdmin");
@@ -34,8 +39,8 @@ if(isset($_POST["Submit"])){
                 Redirect_to("manageAdmin");
             }else{
                 global $connection;
-                $Query="INSERT INTO admin_registration(datetime,username,password,addedby)
-                VALUES('$DateTime','$Username','$Password','$Admin')";
+                $Query="INSERT INTO admin_registration(datetime,username,password,addedby,user_type)
+                VALUES('$DateTime','$Username','$Password','$Admin',$userTypeID)";
                 $Execute=mysqli_query($connection,$Query);
                 if($Execute){
                     $_SESSION["SuccessMessage"]="Admin added successfully";

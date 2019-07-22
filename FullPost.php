@@ -89,7 +89,7 @@ if(isset($_POST["Submit"])){
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li ><a href="portal">Portal</a></li>
+            <!-- <li ><a href="portal">Portal</a></li> -->
             <li><a href="aboutus">About Us</a></li>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -151,12 +151,33 @@ if(isset($_POST["Submit"])){
                 $Post=$DataRows["post"];
             
             ?>
+            
             <div class="blogpost thumbnail">
                 <img class="img-responsive img-rounded" src="Upload/<?php echo $Image; ?>">
             <div class="caption">
                     <h1 id="heading"><?php echo htmlentities($Title); ?></h1>
             <p class="description">Category:<?php echo htmlentities($Category); ?> Published on:
             <?php echo htmlentities($DateTime); ?> </p>  
+            <div id="share-buttons">
+                <!-- Facebook -->
+                <a href="http://www.facebook.com/sharer.php?u=https://mahacyber.com&amp;fullPost?id=<?php echo $postId?>" target="_blank">
+                    <img src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" />
+                </a>
+                <!-- Twitter -->
+                <a href="https://twitter.com/share?url=https://mahacyber.com&amp;fullPost?id=<?php echo $postId?>" target="_blank">
+                    <img src="https://simplesharebuttons.com/images/somacro/twitter.png" alt="Twitter" />
+                </a>
+                
+                <!-- Google+ -->
+                <a href="https://plus.google.com/share?url=https://mahacyber.com&amp;fullPost?id=<?php echo $postId?>" target="_blank">
+                    <img src="https://simplesharebuttons.com/images/somacro/google.png" alt="Google" />
+                </a>
+                
+                <!-- LinkedIn -->
+                <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://mahacyber.com&amp;fullPost?id=<?php echo $postId?>" target="_blank">
+                    <img src="https://simplesharebuttons.com/images/somacro/linkedin.png" alt="LinkedIn" />
+                </a>
+            </div>
             <p class="post"><?php 
             
             echo nl2br($Post); ?> </p>  
@@ -232,7 +253,7 @@ if(isset($_POST["Submit"])){
                     $Category=$DataRows["name"];
                 
                 ?>
-                <a href="Portal.php?category=<?php echo $Category; ?>">
+                <a href="portal?Search=<?php echo $Category; ?>&SearchButton=">
                 <span id="heading"><?php echo $Category."<br>";?></span>
                 </a>
                 <div class="panel-footer"></div>
