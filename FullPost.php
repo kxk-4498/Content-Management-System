@@ -91,7 +91,7 @@ if(isset($_POST["Submit"])){
             <li class="active"><a href="#">Home</a></li>
             <!-- <li ><a href="portal">Portal</a></li> -->
             <li><a href="aboutus">About Us</a></li>
-            <li class="dropdown">
+           <!-- <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             Services <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -106,9 +106,9 @@ if(isset($_POST["Submit"])){
                     }
             ?>
             </ul>
-            </li>
+            </li>-->
             <!-- <li><a href="#">Contact Us</a></li> -->
-            <li><a href="#">Feature</a></li>
+            <li><a href="Login.php">Login</a></li>
         </ul>
         <form action="portal" class="navbar-form navbar-right">
         <div class="form-group">
@@ -236,7 +236,7 @@ if(isset($_POST["Submit"])){
         </div>
             </div><!--Main area ending-->
             <div class="col-sm-offset-1 col-sm-3">
-            <h2>Maharashtra Cyber</h2>
+            <<h2>Maharashtra Cyber</h2>
             <img class="img-responsive imageicon" src="images/mahapolice.png">
             <p>Maharashtra Cyber ​is a nodal agency established by the Government of Maharashtra to tackle cyber crimes and other digital threats. It is engaged in building Cyber Infrastructure for Maharashtra, including Cyber Police Stations, anti-piracy systems, predictive policing systems, awareness about cyber crimesand initiatives, etc.</p>
         <div class="panel panel-primary">

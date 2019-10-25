@@ -33,7 +33,7 @@
             <!-- <li><a href="#">Home</a></li> -->
             <li class="active"><a href="portal">Home</a></li>
             <li><a href="aboutus">About Us</a></li>
-            <li class="dropdown">
+            <!--<li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             Services <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -48,9 +48,9 @@
                     }
             ?>
             </ul>
-            </li>            
+            </li> -->           
             <!-- <li><a href="#">Contact Us</a></li> -->
-            <li><a href="#">Feature</a></li>
+            <li><a href="Login.php">Login</a></li>
         </ul>
         <form method="POST" action="portal" class="navbar-form navbar-right">
         <div class="form-group"> 
@@ -87,11 +87,11 @@
                 }else{
                 $ShowPostFrom=($Page*5)-5;
                 }
-                $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc LIMIT $ShowPostFrom,5";
+                $ViewQuery="SELECT * FROM admin_panel WHERE status='1' ORDER BY datetime desc LIMIT $ShowPostFrom,5";
             }//query for showing portal contents
             else{
             Redirect_to('portal?page=1');
-            $ViewQuery="SELECT * FROM admin_panel ORDER BY datetime desc LIMIT 0,5";}
+            $ViewQuery="SELECT * FROM admin_panel WHERE status='1' ORDER BY datetime desc LIMIT 0,5";}
             $Execute=mysqli_query($connection,$ViewQuery);
             while($DataRows=mysqli_fetch_array($Execute)){
                 $postId=$DataRows["id"];
@@ -153,7 +153,7 @@
               <?php  } ?>
             <?php
             global $connection;
-            $QueryPagination="SELECT COUNT(*) FROM admin_panel";
+            $QueryPagination="SELECT COUNT(*) FROM admin_panel WHERE status='1'";
             $ExecutePagination=mysqli_query($connection,$QueryPagination);
             $RowPagination=mysqli_fetch_array($ExecutePagination);
             $TotalPosts=array_shift($RowPagination);

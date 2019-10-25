@@ -1,6 +1,5 @@
 <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
-
 <?php
 function Redirect_to($New_Location){
     header("Location:".$New_Location);
@@ -10,14 +9,10 @@ function Redirect_to($New_Location){
 function Login_Attempt($Username,$Password){
     global $connection;
     $Query="SELECT * FROM admin_registration 
-    WHERE username='$Username'";
+    WHERE username='$Username' AND password='$Password'";
      $Execute=mysqli_query($connection,$Query);
      if($admin=mysqli_fetch_assoc($Execute)){
-         if(password_verify($Password,$admin["password"])){
-            return $admin;
-         }else{
-             return null;
-         }
+         return $admin;
     }else{
         return null;
     }
@@ -72,5 +67,23 @@ function checkToken( $token, $formName )
 {
     return $token === generateToken( $formName );
 }
-
+/**
+	 * List of never allowed strings
+	 *
+	 * @var array
+	 */
+	 $_never_allowed_str = array(
+		'document.cookie'	=> '[removed]',
+		'document.write'	=> '[removed]',
+		'.parentNode'		=> '[removed]',
+		'.innerHTML'		=> '[removed]',
+		'window.location'	=> '[removed]',
+		'-moz-binding'		=> '[removed]',
+		'<!--'				=> '&lt;!--',
+		'-->'				=> '--&gt;',
+		'<![CDATA['			=> '&lt;![CDATA[',
+		'<comment>'			=> '&lt;comment&gt;'
+	);
 ?>
+
+

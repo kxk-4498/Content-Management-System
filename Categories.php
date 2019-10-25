@@ -68,14 +68,14 @@ if(isset($_POST["Submit"])){
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="portal">
+        <a class="navbar-brand" href="Portal.php">
         <img style="margin-top: -12px;" src="images/maha.jfif" width=40;height=7;>
         </a>
         </div>
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
-            <li class="active"><a href="portal">Portal</a></li>
+            <li class="active"><a href="Portal.php">Home</a></li>
+            <!--<li ><a href="portal" target="_blank">Portal</a></li>
             <li><a href="aboutus">About Us</a></li>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -92,17 +92,10 @@ if(isset($_POST["Submit"])){
                     }
             ?>
             </ul>
-            </li>
+            </li> -->           
             <!-- <li><a href="#">Contact Us</a></li> -->
-            <li><a href="#">Feature</a></li>
+            <!--<li><a href="#">Feature</a></li>-->
         </ul>
-        <form action="portal" class="navbar-form navbar-right">
-        <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search" name="Search">
-        </div>
-        <button class="btn btn-default" name="SearchButton">Go</button>
-        </form>
-        </div>
         </nav>
         <div class="Line" style="height: 10px;background: #27AAE1;"></div>
 <div class="container-fuid">
@@ -135,9 +128,9 @@ if(isset($_POST["Submit"])){
                 <span class="label pull-right label-warning">
                 <?php echo $TotalUnApprovedComments; ?></span>
         </a></li>
-        <li><a href="#">
+        <!--<li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
-        &nbsp;Live Blog</a></li>
+        &nbsp;Live Blog</a></li>-->
         <li><a href="logout">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>

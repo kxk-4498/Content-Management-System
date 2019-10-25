@@ -1,6 +1,7 @@
 <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
-<?php require_once("include/Functions.php");?>
+<?php require_once("include/Functions.php");
+?>
 <!DOCTYPE>
 
 <html>
@@ -29,9 +30,9 @@
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
             <!-- <li><a href="#">Home</a></li> -->
-            <li class="active"><a href="portal">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li class="dropdown">
+            <li><a href="portal">Home</a></li>
+            <li class="active"><a href="#">About Us</a></li>
+            <!--<li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             Services <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -46,9 +47,9 @@
                     }
             ?>
             </ul>
-            </li>            
+            </li> -->           
             <!-- <li><a href="#">Contact Us</a></li> -->
-            <li><a href="#">Feature</a></li>
+            <li><a href="Login.php">Login</a></li>
         </ul>
         <form method="POST" action="portal" class="navbar-form navbar-right">
         <div class="form-group"> 

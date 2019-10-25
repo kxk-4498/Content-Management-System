@@ -1,7 +1,6 @@
  <?php require_once("include/db.php");?>
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
-
 <?php 
 Confirm_Login();
 Confirm_Admin();
@@ -13,11 +12,15 @@ if(isset($_POST["Submit"])){
         if( checkToken($_REQUEST['csrf_token'], 'protectedManageAdmin')) {
             global $connection;
             $Username=mysqli_real_escape_string($connection,$_POST["Username"]);
-            $Username=htmlentities(htmlspecialchars($Username, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            $Username=htmlentities(htmlspecialchars($Username, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection 
             $Password=mysqli_real_escape_string($connection,$_POST["Password"]);
             $Password=htmlentities(htmlspecialchars($Password, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            $salt='Usernameforproject1010Novem2019';
+            //$Username=sha1($Username.$salt);
+            $Password=sha1($Password.$salt);
             $ConfirmPassword=mysqli_real_escape_string($connection,$_POST["ConfirmPassword"]);
             $ConfirmPassword=htmlentities(htmlspecialchars($ConfirmPassword, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
+            $ConfirmPassword=sha1($ConfirmPassword.$salt);
             $User_Type=mysqli_real_escape_string($connection,$_POST["user_type"]);
             $User_Type=htmlentities(htmlspecialchars($User_Type, ENT_COMPAT,'ISO-8859-1', true),ENT_COMPAT,'ISO-8859-1', true); // xss protection
             date_default_timezone_set("Asia/Kolkata");
@@ -25,10 +28,10 @@ if(isset($_POST["Submit"])){
             $DateTime=strftime("%B-%d-%Y %H:%M:%S",$CurrentTime);
             $DateTime;
             $Admin=$_SESSION["Username"];
-            $userTypeQuery = "select * from usertype where title='$User_Type'";
-            $Execute=mysqli_query($connection, $userTypeQuery) or die("error");
-            $userTypeRow = mysqli_fetch_array($Execute);
-            $userTypeID = $userTypeRow["id"];
+            //$userTypeQuery = "select * from usertype where title='$User_Type'";
+            //$Execute=mysqli_query($connection, $userTypeQuery) or die("error");
+            //$userTypeRow = mysqli_fetch_array($Execute);
+            //$userTypeID = $userTypeRow["id"];
             if(empty($Username)||empty($Password)||empty($ConfirmPassword)){
                 $_SESSION["ErrorMessage"]="all feilds must be filled out";
                 Redirect_to("manageAdmin");
@@ -39,13 +42,9 @@ if(isset($_POST["Submit"])){
                  $_SESSION["ErrorMessage"]="Password/Confirm Password does not match!";
                 Redirect_to("manageAdmin");
             }else{
-
-                // $bcrypt = new Bcrypt();
-                // $hash = $bcrypt->create('$Password');
-                $hash = password_hash($Password, PASSWORD_BCRYPT);
                 global $connection;
                 $Query="INSERT INTO admin_registration(datetime,username,password,addedby,user_type)
-                VALUES('$DateTime','$Username','$hash','$Admin',$userTypeID)";
+                VALUES('$DateTime','$Username','$Password','$Admin',$User_Type)";
                 $Execute=mysqli_query($connection,$Query);
                 if($Execute){
                     $_SESSION["SuccessMessage"]="Admin added successfully";
@@ -84,7 +83,7 @@ if(isset($_POST["Submit"])){
     </head>
     <body>
     <div style="height: 10px;background: #27AAE1;"></div>
-<nav class ="navbar navbar-inverse" role="navigation">
+    <nav class ="navbar navbar-inverse" role="navigation">
     <div class="container">
         <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse">
@@ -99,8 +98,8 @@ if(isset($_POST["Submit"])){
         </div>
         <div class="collapse navbar-collapse" id="collapse">
         <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
-            <li class="active"><a href="Portal.php" target="_blank">Portal</a></li>
+            <li class="active"><a href="Portal.php">Home</a></li>
+            <!--<li ><a href="portal" target="_blank">Portal</a></li>
             <li><a href="aboutus">About Us</a></li>
             <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -117,17 +116,10 @@ if(isset($_POST["Submit"])){
                     }
             ?>
             </ul>
-            </li>            
+            </li> -->           
             <!-- <li><a href="#">Contact Us</a></li> -->
-            <li><a href="#">Feature</a></li>
+            <!--<li><a href="#">Feature</a></li>-->
         </ul>
-        <form action="Portal.php" class="navbar-form navbar-right">
-        <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search" name="Search">
-        </div>
-        <button class="btn btn-default" name="SearchButton">Go</button>
-        </form>
-        </div>
         </nav>
         <div class="Line" style="height: 10px;background: #27AAE1;"></div>
 
@@ -164,9 +156,9 @@ if(isset($_POST["Submit"])){
                 <?php echo $TotalUnApprovedComments; ?></span>
             
         </a></li>
-        <li><a href="#">
+        <!--<li><a href="#">
         <span class="glyphicon glyphicon-equalizer"></span>
-        &nbsp;Live Blog</a></li>
+        &nbsp;Live Blog</a></li>-->
         <li><a href="logout">
         <span class="glyphicon glyphicon-log-out"></span>
         &nbsp;Logout</a></li>
@@ -197,18 +189,11 @@ if(isset($_POST["Submit"])){
             <input class="form-control" type="Password" name="ConfirmPassword" id="ConfirmPassword" placeholder="Retype Same Password">
             </div>
             <div class="form-group">
-            <label for="categoryselect"><span class="FieldInfo">User Type:</span></label>
+            <label for="categoryselect"><span class="FieldInfo">User Type:(0 for admin and 1 for content author)</span></label>
             <select class ="form-control" id="categoryselect" name="user_type">
-            <?php
-                global $connection;
-                $ViewQuery="SELECT * FROM usertype";
-                $Execute=mysqli_query($connection,$ViewQuery);
-                while($DataRows=mysqli_fetch_array($Execute)){
-                    $Id=$DataRows["id"];
-                    $title=$DataRows["title"];
-            ?>
-            <option><?php echo $title; ?></option>
-            <?php } ?>
+
+            <option value='0'>0</option>
+            <option value='1'>1</option>
             </select>
             </div>
             <br>
@@ -231,7 +216,7 @@ if(isset($_POST["Submit"])){
     </tr>
 <?php
 global $connection;
-$ViewQuery="SELECT * FROM admin_registration as au left join usertype as ut on au.user_type = ut.id  ORDER BY au.datetime desc";
+$ViewQuery="SELECT * FROM admin_registration WHERE user_type='0' ORDER BY datetime desc";
 $Execute=mysqli_query($connection,$ViewQuery);
 $SrNo=0;
 while($DataRows=mysqli_fetch_array($Execute)){
@@ -239,7 +224,7 @@ while($DataRows=mysqli_fetch_array($Execute)){
     $DateTime=$DataRows["datetime"];
     $AdminName=$DataRows["username"];
     $AddedBy=$DataRows["addedby"]; 
-    $userType=$DataRows["title"];
+    $userType=$DataRows["user_type"];
     $SrNo++;
 
 ?>
@@ -263,7 +248,55 @@ while($DataRows=mysqli_fetch_array($Execute)){
 </tr>
 <?php } ?>
     </table>
-        </div><!--Ending of Main area-->
+        </div>
+        <div class="table-responsive">
+         <table class="table table-striped table-hover">
+    <tr>
+        <th>Sr No.</th>
+        <th>Date & TIme</th>
+        <th>Username</th>
+        <th>User Type</th>
+        <th>Added By</th>
+        <th>Action</th>
+    
+    
+    </tr>
+<?php
+global $connection;
+$ViewQuery="SELECT * FROM admin_registration WHERE user_type='1' ORDER BY datetime desc";
+$Execute=mysqli_query($connection,$ViewQuery);
+$SrNo=0;
+while($DataRows=mysqli_fetch_array($Execute)){
+    $Id=$DataRows["id"];
+    $DateTime=$DataRows["datetime"];
+    $AdminName=$DataRows["username"];
+    $AddedBy=$DataRows["addedby"]; 
+    $userType=$DataRows["user_type"];
+    $SrNo++;
+
+?>
+<tr>
+        <td><?php echo $SrNo;?></td>
+        <td><?php echo $DateTime;?></td>
+        <td><?php echo $AdminName;?></td>
+        <td><?php 
+                // $query="select * from user_type where id=$userType";
+                // $Execute=mysqli_query($connection, $query);
+                // $data = mysqli_fetch_array($Execute);
+                // $userTypetitle=$data["title"];
+        echo $userType; ?></td>
+        <td><?php echo $AddedBy;?></td>
+        <td><a href="deleteAdmin?id=<?php echo $Id;?>">
+        <span class="btn btn-danger">Delete</span>
+        
+</a>
+</td>
+
+</tr>
+<?php } ?>
+    </table>
+        </div>        
+<!--Ending of Main area-->
 
 </div><!--Ending of Row-->
 </div><!--Ending of Container-->

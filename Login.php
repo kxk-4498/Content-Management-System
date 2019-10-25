@@ -2,10 +2,14 @@
 <?php require_once("include/Sessions.php");?>
 <?php require_once("include/Functions.php");?>
 <?php
+
 if(isset($_POST["Submit"])){
     global $connection;
     $Username=mysqli_real_escape_string($connection,$_POST["Username"]);
     $Password=mysqli_real_escape_string($connection,$_POST["Password"]);
+    $salt='Usernameforproject1010Novem2019';
+    //$Username=sha1($Username.$salt);
+    $Password=sha1($Password.$salt);
     if(empty($Username)||empty($Password)){
         $_SESSION["ErrorMessage"]="All feilds must be filled out";
         Redirect_to("login");
@@ -26,7 +30,7 @@ if(isset($_POST["Submit"])){
             
 
         }else{
-            $_SESSION["ErrorMessage"]="Invalid Email or Password!".$Password;
+            $_SESSION["ErrorMessage"]="Invalid Email or Password!";
             Redirect_to("login");
 
     }
